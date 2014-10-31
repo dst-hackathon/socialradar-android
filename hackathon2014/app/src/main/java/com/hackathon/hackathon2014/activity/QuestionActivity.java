@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -94,19 +96,23 @@ public class QuestionActivity extends Activity {
             }
 
             @Override
+            protected void onPreExecute() {
+                Toast.makeText(getActivity().getBaseContext(),"Loading...", Toast.LENGTH_SHORT ).show();
+
+            }
+
+            @Override
             protected List<Question> doInBackground(Void... voids) {
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
-                HttpHeaders httpHeaders = new HttpHeaders();
-                List<MediaType> mediaTypes = new ArrayList<MediaType>();
-                mediaTypes.add(MediaType.APPLICATION_JSON);
-                httpHeaders.setAccept(mediaTypes);
-                HttpEntity<String> httpEntity = new HttpEntity<String>(null,httpHeaders);
-                restTemplate.exchange(url, HttpMethod.GET, httpEntity,Question[].class);
-
                 List<Question> questions = new ArrayList<Question>();
-                questions.addAll(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
+
+                try {
+                    RestTemplate restTemplate = new RestTemplate();
+                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                    questions.addAll(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
+                } catch (RestClientException e) {
+                    Toast.makeText(getActivity().getBaseContext(),"Fail !!!!!!" + e.getMessage(), Toast.LENGTH_LONG ).show();
+                }
 
                 //MOCK
                 questions.add(
