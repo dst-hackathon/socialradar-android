@@ -6,21 +6,28 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+
+import java.util.Calendar;
 
 /**
  * Created by smileyOpal on 10/31/14.
  */
 public class SignUpActivity extends Activity {
     private final int RESULT_LOAD_IMAGE = 1;
+    private final int RESULT_OPEN_CAMERA = 2;
     private ImageView imageView;
+    private String imagePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +72,18 @@ public class SignUpActivity extends Activity {
 
                                     startActivityForResult(intent, RESULT_LOAD_IMAGE);
                                 } else if (i == 1) {
+                                    imagePath = Environment.getExternalStorageDirectory()
+                                            + "/images/socialRadar/"
+                                            + "uploadImage"
+                                            + ".jpg";
 
+                                    Log.i("SignUpActivity", "image path: " + imagePath);
+
+                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imagePath);
+
+
+                                    startActivityForResult(intent, RESULT_OPEN_CAMERA);
                                 }
                             }
                         });
@@ -79,21 +97,29 @@ public class SignUpActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+        ImageView imageView = (ImageView) findViewById(R.id.imageIcon);
 
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
+        if(resultCode == RESULT_OK && null != data) {
 
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
+            if (requestCode == RESULT_LOAD_IMAGE) {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
 
-            ImageView imageView = (ImageView) findViewById(R.id.imageIcon);
-            imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
 
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String picturePath = cursor.getString(columnIndex);
+                cursor.close();
+                imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+
+            }
+            else if (requestCode == RESULT_OPEN_CAMERA){
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                imageView.setImageBitmap(bitmap);
+            }
         }
+
     }
 }
