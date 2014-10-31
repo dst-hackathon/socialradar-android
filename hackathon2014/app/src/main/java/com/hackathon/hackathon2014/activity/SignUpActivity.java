@@ -8,12 +8,10 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +61,6 @@ public class SignUpActivity extends Activity {
         }
         else {
             mode = MODE_NEW_ACCT;
-            mode = MODE_EDIT_ACCT;
         }
 
         if(mode.equals(MODE_NEW_ACCT)) {
