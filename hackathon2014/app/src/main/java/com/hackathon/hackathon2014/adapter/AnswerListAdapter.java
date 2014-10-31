@@ -1,12 +1,16 @@
 package com.hackathon.hackathon2014.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.hackathon.hackathon2014.AnswerHolder;
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.Answer;
 
@@ -44,14 +48,35 @@ public class AnswerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Answer item = getItem(i);
+        final Answer answer = getItem(i);
 
         if (view == null) {
             view = LayoutInflater.from(activity).inflate(R.layout.answer_row, null);
         }
 
         TextView answerText = (TextView) view.findViewById(R.id.answerText);
-        answerText.setText(item.getText());
+        answerText.setText(answer.getText());
+
+        final CheckBox answerCheckbox = (CheckBox) view.findViewById(R.id.answerCheckButton);
+
+        answerCheckbox.setOnCheckedChangeListener(null);
+
+        answerCheckbox.setChecked(answer.isChecked());
+
+        answerCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                Log.e("com.hackathon.hackathon2014","answer id " +answer.getId() + " : " + answer.getText());
+                Log.e("com.hackathon.hackathon2014","check " +b);
+                Log.e("com.hackathon.hackathon2014","change from  " +answer.isChecked() + " to " + b);
+
+                answer.setChecked(b);
+                AnswerHolder.add(answer);
+
+                Log.e("com.hackathon.hackathon2014","All  " +AnswerHolder.getAll());
+            }
+        });
 
         return view;
     }

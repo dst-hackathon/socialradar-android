@@ -12,11 +12,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.hackathon.hackathon2014.AnswerHolder;
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.adapter.AnswerListAdapter;
 import com.hackathon.hackathon2014.model.Answer;
 import com.hackathon.hackathon2014.model.Question;
 
+import org.springframework.util.CollectionUtils;
+
+import java.util.Collections;
 import java.util.List;
 
 
@@ -63,14 +67,13 @@ public class AnswerActivity extends Activity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_answer, container, false);
 
-            List<Answer> answers = null;
+            List<Answer> answers = getAnswers();
 
-            if(getArguments()!=null){
-                Answer selectedAnswer = (Answer) getArguments().getSerializable("answer");
-                answers = selectedAnswer.getAnswers();
-            }else{
-                Question question = (Question) getActivity().getIntent().getSerializableExtra("question");
-                answers = question.getAnswers();
+            for (Answer answer : answers) {
+                if (AnswerHolder.contains(answer)) {
+                    int index = AnswerHolder.indexOf(answer);
+                    answer.setChecked(AnswerHolder.get(index).isChecked());
+                }
             }
 
             AnswerListAdapter answerListAdapter = new AnswerListAdapter(this.getActivity(),answers);
@@ -81,6 +84,18 @@ public class AnswerActivity extends Activity {
             listView.setOnItemClickListener(new OpenNestedAnswerEvent(answers));
 
             return rootView;
+        }
+
+        private List<Answer> getAnswers() {
+            List<Answer> answers;
+            if(getArguments()!=null){
+                Answer selectedAnswer = (Answer) getArguments().getSerializable("answer");
+                answers = selectedAnswer.getAnswers();
+            }else{
+                Question question = (Question) getActivity().getIntent().getSerializableExtra("question");
+                answers = question.getAnswers();
+            }
+            return answers;
         }
 
         private class OpenNestedAnswerEvent implements android.widget.AdapterView.OnItemClickListener {

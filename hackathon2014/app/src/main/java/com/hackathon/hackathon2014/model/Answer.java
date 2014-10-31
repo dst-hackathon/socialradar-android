@@ -9,10 +9,15 @@ import java.util.List;
  */
 public class Answer implements Serializable{
 
+    static long i = 0;
+
+    private Long id;
     private String text;
     private List<Answer> answers = new ArrayList<Answer>();
+    private boolean checked;
 
     public Answer(String text, String... answers) {
+        id = i++;
         this.text = text;
 
         for (String answer : answers) {
@@ -34,5 +39,38 @@ public class Answer implements Serializable{
 
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Answer answer = (Answer) o;
+
+        if (!id.equals(answer.id)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }
