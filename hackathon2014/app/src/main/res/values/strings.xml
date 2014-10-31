@@ -4,5 +4,10 @@
     <string name="app_name">hackathon2014</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_signup">Sign Up</string>
+    <string-array name="signup_image_option">
+        <item>Gallery</item>
+        <item>Camera</item>
+    </string-array>
 
 </resources>
