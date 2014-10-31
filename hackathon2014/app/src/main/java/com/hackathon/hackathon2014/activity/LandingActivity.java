@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.hackathon.hackathon2014.LoginActivity;
 import com.hackathon.hackathon2014.R;
 
 

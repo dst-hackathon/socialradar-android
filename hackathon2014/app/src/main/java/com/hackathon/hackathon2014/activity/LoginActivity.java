@@ -1,27 +1,29 @@
 package com.hackathon.hackathon2014.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.utility.AlertMessageDialogue;
 
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends Activity {
 
 	private Button loginButton;
 	private EditText userObj;
 	private EditText passwordObj;
 	final Context context = this;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		boolean isLoggedIn = false;
 
@@ -66,19 +68,18 @@ public class LoginActivity extends ActionBarActivity {
 
 		loginButton.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				String user = userObj.getText().toString();
-				String password = passwordObj.getText().toString();
+            @Override
+            public void onClick(View arg0) {
+                String user = userObj.getText().toString();
+                String password = passwordObj.getText().toString();
 
-				if ( validateLogin(user, password) )
-				{
-					goToHomePage();
-				}
+                if (validateLogin(user, password)) {
+                    goToHomePage();
+                }
 
-			}
+            }
 
-		});
+        });
 
 	}
 
@@ -89,8 +90,8 @@ public class LoginActivity extends ActionBarActivity {
 	}
 
 	public void goToHomePage() {
-		Intent intent = new Intent(this, HomeActivity.class);
-		startActivity(intent);
+//		Intent intent = new Intent(this, HomeActivity.class);
+//		startActivity(intent);
 	}
 
 	public boolean validateLogin(String user, String password) {
@@ -103,35 +104,9 @@ public class LoginActivity extends ActionBarActivity {
 		}
 
 		if ( loginFailed ) {
-			showErrorMessage("Login Failed", errorMessage);
+			new AlertMessageDialogue( context, "Login Failed", errorMessage );
 		}
 		return !loginFailed;
-	}
-
-	private void showErrorMessage(String title, String errorMessage) {
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-				context);
-
-		// set title
-		alertDialogBuilder.setTitle(title);
-
-		// set dialog message
-		alertDialogBuilder
-				.setMessage(errorMessage)
-				.setCancelable(false)
-				.setNegativeButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						// if this button is clicked, just close
-						// the dialog box and do nothing
-						dialog.cancel();
-					}
-				});
-
-		// create alert dialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
-
-		// show it
-		alertDialog.show();
 	}
 
 }
