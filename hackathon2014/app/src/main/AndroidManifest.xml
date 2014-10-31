@@ -17,8 +17,15 @@
         <activity
             android:name=".activity.LandingActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-
+        <activity
+            android:name="com.hackathon.hackathon2014.LoginActivity"
+            android:label="@string/app_name" >
+        </activity>
         <activity
             android:name=".SignUpActivity"
             android:label="Sign Up" >
@@ -27,10 +34,6 @@
         <activity
             android:name=".activity.QuestionActivity"
             android:label="@string/title_activity_question">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
