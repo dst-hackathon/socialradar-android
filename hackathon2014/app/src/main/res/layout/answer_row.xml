@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="130dp">
+
+    <ImageButton
+        android:id="@+id/answerCheckButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/ic_launcher"
+        />
+
+    <TextView
+        android:id="@+id/answerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:textSize="20dp"
+        android:layout_centerVertical="true"
+        android:layout_toStartOf="@+id/nextButton"
+        android:layout_toEndOf="@+id/answerCheckButton" />
+
+    <ImageView
+        android:id="@+id/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_launcher"
+        android:layout_centerVertical="true"
+        android:cropToPadding="false"
+        android:layout_alignParentEnd="true"
+        android:contentDescription=""
+        />
+
+</RelativeLayout>

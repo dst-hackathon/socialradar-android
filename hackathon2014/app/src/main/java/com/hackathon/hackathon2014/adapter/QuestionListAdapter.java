@@ -1,4 +1,4 @@
-package com.hackathon.hackathon2014;
+package com.hackathon.hackathon2014.adapter;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.model.Question;
 
 import java.util.List;
 
