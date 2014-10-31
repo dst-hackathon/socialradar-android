@@ -1,4 +1,4 @@
-package com.hackathon.hackathon2014;
+package com.hackathon.hackathon2014.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -18,6 +18,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.hackathon.hackathon2014.R;
 
 import java.io.File;
 
@@ -25,22 +28,47 @@ import java.io.File;
  * Created by smileyOpal on 10/31/14.
  */
 public class SignUpActivity extends Activity {
-    private final String USERNAME = "SIGNUP_USERNAME";
-    private final String PASSWORD = "SIGNUP_PASSWORD";
-    private final String DISPLAY_NAME = "SIGNUP_DISPLAY_NAME";
-
     private final int RESULT_LOAD_IMAGE = 1;
     private final int RESULT_OPEN_CAMERA = 2;
+    private final String LOGIN_SERVICE_URL = "";
+
+    public final String USERNAME = "SIGNUP_USERNAME";
+    private final String PASSWORD = "SIGNUP_PASSWORD";
+
+    public final String DISPLAY_NAME = "SIGNUP_DISPLAY_NAME";
+    public final String SIGNUP_MODE = "SIGNUP_MODE";
+    public final String MODE_NEW_ACCT = "MODE_NEW_ACCT";
+
+    public final String MODE_EDIT_ACCT = "MODE_EDIT_ACCT";
 
     private ImageView _imageView;
     private Button _signupButton;
 
     private String _imagePath;
+    private String mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+
+        Bundle extras = getIntent().getExtras();
+
+        if (null != extras && null != extras.getString(SIGNUP_MODE)) {
+            mode = extras.getString(SIGNUP_MODE);
+        }
+        else {
+            mode = MODE_NEW_ACCT;
+            mode = MODE_EDIT_ACCT;
+        }
+
+        if(mode.equals(MODE_NEW_ACCT)) {
+            clearControls();
+        }
+        else {
+            loadSignUpData();
+        }
+
         setImageIconAction();
         setSignUpButton();
     }
@@ -117,30 +145,19 @@ public class SignUpActivity extends Activity {
 
                 if (hasEmptyValue(_name) || hasEmptyValue(_username) || hasEmptyValue(_password)
                         || hasEmptyValue(_cPassword) || hasEmptyValue(_email)) {
-                    createErrorDialog("Please fill in all information!");
+                    displayToast("Please fill in all information!");
                 } else if (isNotMatch(_password, _cPassword)) {
-                    createErrorDialog("Password mismatch!");
-                }
-                else {
+                    displayToast("Password mismatch!");
+                } else {
 //                    submitSignUpData();
                 }
             }
         });
     }
 
-    private void createErrorDialog(String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("ERROR");
-        builder.setMessage(message);
-
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
-
-        builder.create();
-        builder.show();
+    private void displayToast(String message) {
+        Toast.makeText(this, message,
+                Toast.LENGTH_LONG).show();
     }
 
     private boolean isNotMatch(EditText password, EditText cPassword) {
@@ -184,6 +201,24 @@ public class SignUpActivity extends Activity {
                 });
         builder.create();
         builder.show();
+    }
+
+    private void clearControls() {
+        EditText _name = (EditText) findViewById(R.id.name);
+        EditText _username = (EditText) findViewById(R.id.username);
+        EditText _password = (EditText) findViewById(R.id.password);
+        EditText _cPassword = (EditText) findViewById(R.id.confirmpassword);
+        EditText _email = (EditText) findViewById(R.id.email);
+
+        _name.setText("");
+        _username.setText("");
+        _password.setText("");
+        _cPassword.setText("");
+        _email.setText("");
+    }
+
+    private void loadSignUpData() {
+
     }
 
     //not working yet

@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.hackathon.hackathon2014.LoginActivity;
 import com.hackathon.hackathon2014.R;
-import com.hackathon.hackathon2014.SignUpActivity;
 
 
 public class LandingActivity extends Activity {
