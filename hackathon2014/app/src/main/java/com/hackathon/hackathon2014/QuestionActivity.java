@@ -1,19 +1,28 @@
 package com.hackathon.hackathon2014;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -63,42 +72,69 @@ public class QuestionActivity extends Activity {
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_question, container, false);
 
-
-            List<Question> list = getQuestions();
-
-            QuestionListAdapter questionListAdapter = new QuestionListAdapter(this.getActivity(), list);
-
-//                    new ArrayAdapter<String>(this.getActivity(), android.R.layout.simple_list_item_1, list);
-
-
-            ListView listView = (ListView) rootView.findViewById(R.id.questionListView);
-            listView.setAdapter(questionListAdapter);
+            new QuestionRequestTask(getActivity(),rootView).execute();
 
             return rootView;
         }
-    }
 
-    private static List<Question> getQuestions() {
-        List<Question> list = new ArrayList<Question>();
+        private class QuestionRequestTask extends AsyncTask<Void,Void,List<Question>> {
+            private final String url = "http://172.22.1.81:8080/hackaton/questions";
 
-        list.add(new Question("อาหาร" + "ที่คุณชอบ"));
-        list.add(new Question("สี" + "ที่คุณชอบ"));
-        list.add(new Question("สัตว์" + "ที่คุณชอบ"));
-        list.add(new Question("Mobile" + "ที่คุณชอบ"));
-        list.add(new Question("เพศ" + "ที่คุณชอบ"));
-        list.add(new Question("หนัง" + "ที่คุณชอบ"));
-        list.add(new Question("กีฬา" + "ที่คุณชอบ"));
-        list.add(new Question("เพลง" + "ที่คุณชอบ"));
-        list.add(new Question("เครื่องดื่ม" + "ที่คุณชอบ"));
-        list.add(new Question("Notebook" + "ที่คุณชอบ"));
-        list.add(new Question("ขนม" + "ที่คุณชอบ"));
-        list.add(new Question("ศิลปิน" + "ที่คุณชอบ"));
-        list.add(new Question("หนังสือ" + "ที่คุณชอบ"));
-        list.add(new Question("วิชาเรียน" + "ที่คุณชอบ"));
-        list.add(new Question("Brand เสื้อผ้า" + "ที่คุณชอบ"));
-        list.add(new Question("งานอดิเรก"));
-        list.add(new Question("สถานที่เที่ยว" + "ที่คุณชอบ"));
+            private Activity activity;
+            private View view;
 
-        return list;
+            public QuestionRequestTask(Activity activity, View view) {
+                this.activity = activity;
+                this.view = view;
+            }
+
+            @Override
+            protected List<Question> doInBackground(Void... voids) {
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+
+                HttpHeaders httpHeaders = new HttpHeaders();
+                List<MediaType> mediaTypes = new ArrayList<MediaType>();
+                mediaTypes.add(MediaType.APPLICATION_JSON);
+                httpHeaders.setAccept(mediaTypes);
+                HttpEntity<String> httpEntity = new HttpEntity<String>(null,httpHeaders);
+                restTemplate.exchange(url, HttpMethod.GET, httpEntity,Question[].class);
+
+                List<Question> questions = Arrays.asList(restTemplate.getForObject(url, Question[].class));
+                Log.e(this.getClass().getName(), questions.toString());
+
+                return questions;
+            }
+
+            @Override
+            protected void onPostExecute(List<Question> questions) {
+                QuestionListAdapter questionListAdapter = new QuestionListAdapter(activity, questions);
+
+                ListView listView = (ListView) view.findViewById(R.id.questionListView);
+                listView.setAdapter(questionListAdapter);
+
+                listView.setOnItemClickListener(new OpenAnswerEvent(activity, questions));
+            }
+        }
+
+        private class OpenAnswerEvent implements android.widget.AdapterView.OnItemClickListener {
+
+            private List<Question> questions;
+            private Activity activity;
+
+            private OpenAnswerEvent(Activity activity, List<Question> questions) {
+                this.activity = activity;
+                this.questions = questions;
+            }
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Question question = questions.get(i);
+
+                Intent intent = new Intent(activity,AnswerActivity.class);
+                intent.putExtra("question",question);
+                activity.startActivity(intent);
+            }
+        }
     }
 }

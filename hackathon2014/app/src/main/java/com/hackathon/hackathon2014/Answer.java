@@ -6,17 +6,10 @@ import java.util.List;
 /**
  * Created by keerati on 10/31/14 AD.
  */
-public class Question implements Serializable{
+public class Answer implements Serializable{
+
     private String text;
-
     private List<Answer> answers;
-
-    public Question() {
-    }
-
-    public Question(String text) {
-        this.text = text;
-    }
 
     public String getText() {
         return text;
