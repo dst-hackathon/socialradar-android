@@ -8,10 +8,12 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +23,9 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.model.RegisterInfo;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 /**
@@ -123,6 +127,7 @@ public class SignUpActivity extends Activity {
 
     private void setImageIconAction() {
         _imageView = (ImageView) findViewById(R.id.imageIcon);
+        _imageView.setDrawingCacheEnabled(true);
         _imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,10 +154,30 @@ public class SignUpActivity extends Activity {
                 } else if (isNotMatch(_password, _cPassword)) {
                     displayToast("Password mismatch!");
                 } else {
-//                    submitSignUpData();
+                    submitSignUpData(_name, _username, _password, _email);
                 }
             }
         });
+    }
+
+    private void submitSignUpData(EditText name, EditText username, EditText password, EditText email) {
+        setupRegisterInfo(name, username, password, email);
+
+        // post request
+    }
+
+    private RegisterInfo setupRegisterInfo(EditText name, EditText username, EditText password, EditText email) {
+        RegisterInfo registerInfo = new RegisterInfo();
+        registerInfo.setDisplayName(getEditTextValue(name));
+        registerInfo.setUsername(getEditTextValue(username));
+        registerInfo.setPassword(getEditTextValue(password));
+        registerInfo.setEmail(getEditTextValue(email));
+
+        Bitmap bitmap = Bitmap.createBitmap(_imageView.getDrawingCache());
+        ByteArrayOutputStream stream=new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+        registerInfo.setImage(stream.toByteArray());
+        return registerInfo;
     }
 
     private void displayToast(String message) {
