@@ -105,7 +105,8 @@ public class QuestionActivity extends Activity {
                 HttpEntity<String> httpEntity = new HttpEntity<String>(null,httpHeaders);
                 restTemplate.exchange(url, HttpMethod.GET, httpEntity,Question[].class);
 
-                List<Question> questions = new ArrayList<Question>(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
+                List<Question> questions = new ArrayList<Question>();
+                questions.addAll(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
 
                 //MOCK
                 questions.add(
