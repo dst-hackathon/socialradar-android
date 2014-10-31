@@ -1,9 +1,11 @@
-package com.hackathon.hackathon2014;
+package com.hackathon.hackathon2014.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.hackathon.hackathon2014.R;
 
 
 public class LandingActivity extends Activity {

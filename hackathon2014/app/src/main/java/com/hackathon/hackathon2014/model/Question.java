@@ -1,4 +1,6 @@
-package com.hackathon.hackathon2014;
+package com.hackathon.hackathon2014.model;
+
+import com.hackathon.hackathon2014.model.Answer;
 
 import java.io.Serializable;
 import java.util.List;

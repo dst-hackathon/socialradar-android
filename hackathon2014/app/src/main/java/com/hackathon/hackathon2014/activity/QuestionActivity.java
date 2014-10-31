@@ -1,4 +1,4 @@
-package com.hackathon.hackathon2014;
+package com.hackathon.hackathon2014.activity;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
+import com.hackathon.hackathon2014.model.Question;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
