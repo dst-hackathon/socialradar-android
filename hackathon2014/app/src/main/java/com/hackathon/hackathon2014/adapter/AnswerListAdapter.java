@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackathon.hackathon2014.AnswerHolder;
@@ -67,16 +68,23 @@ public class AnswerListAdapter extends BaseAdapter {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                Log.e("com.hackathon.hackathon2014","answer id " +answer.getId() + " : " + answer.getText());
-                Log.e("com.hackathon.hackathon2014","check " +b);
-                Log.e("com.hackathon.hackathon2014","change from  " +answer.isChecked() + " to " + b);
+                Log.e("com.hackathon.hackathon2014", "answer id " + answer.getId() + " : " + answer.getText());
+                Log.e("com.hackathon.hackathon2014", "check " + b);
+                Log.e("com.hackathon.hackathon2014", "change from  " + answer.isChecked() + " to " + b);
 
                 answer.setChecked(b);
                 AnswerHolder.add(answer);
 
-                Log.e("com.hackathon.hackathon2014","All  " +AnswerHolder.getAll());
+                Log.e("com.hackathon.hackathon2014", "All  " + AnswerHolder.getAll());
             }
         });
+
+        ImageView imageView = (ImageView) view.findViewById(R.id.nextButton);
+        if (CollectionUtils.isEmpty(answer.getAnswers())) {
+            imageView.setVisibility(View.INVISIBLE);
+        } else {
+            imageView.setVisibility(View.VISIBLE);
+        }
 
         return view;
     }

@@ -110,7 +110,9 @@ public class AnswerActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Answer answer = answers.get(i);
 
-                displayFragment(answer);
+                if( !CollectionUtils.isEmpty(answer.getAnswers()) ){
+                    displayFragment(answer);
+                }
             }
 
         }
