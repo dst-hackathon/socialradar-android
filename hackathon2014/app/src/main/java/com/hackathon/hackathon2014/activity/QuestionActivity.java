@@ -16,6 +16,7 @@ import android.widget.ListView;
 
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
+import com.hackathon.hackathon2014.model.Answer;
 import com.hackathon.hackathon2014.model.Question;
 
 import org.springframework.http.HttpEntity;
@@ -82,7 +83,7 @@ public class QuestionActivity extends Activity {
         }
 
         private class QuestionRequestTask extends AsyncTask<Void,Void,List<Question>> {
-            private final String url = "http://172.22.1.81:8080/hackaton/questions";
+            private final String url = "http://api.radar.codedeck.com/questions";
 
             private Activity activity;
             private View view;
@@ -104,7 +105,44 @@ public class QuestionActivity extends Activity {
                 HttpEntity<String> httpEntity = new HttpEntity<String>(null,httpHeaders);
                 restTemplate.exchange(url, HttpMethod.GET, httpEntity,Question[].class);
 
-                List<Question> questions = Arrays.asList(restTemplate.getForObject(url, Question[].class));
+                List<Question> questions = new ArrayList<Question>(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
+
+                //MOCK
+                questions.add(
+                     new Question("อาหาร" + "ที่คุณชอบ"
+                         ,new Answer("ญี่ปุ่น","เทปันยากิ","ซูชิ")
+                         ,new Answer("จีน","พระกระโดดกำแพง","หูฉลามน้ำแดง","ติ่มซำ","กระเพาะปลาผัดแห้ง","กระเพาะปลาน้ำแดง","ขาหมูหมั่นโถว")
+                         ,new Answer("ไทย","กระเพราไข่ดาว", "แกงป้า")
+                         ,new Answer("อินเดีย")
+                         ,new Answer("เกาหลี")
+                         ,new Answer("อิตาเลี่ยน" ,"พิซซ่า","สปาเกตตี้")
+                     )
+                );
+                questions.add(new Question("สี" + "ที่คุณชอบ"));
+                questions.add(new Question("สัตว์" + "ที่คุณชอบ"));
+                questions.add(new Question("Mobile" + "ที่คุณชอบ"));
+                questions.add(new Question("เพศ" + "ที่คุณชอบ"
+                     ,new Answer("ชาย")
+                     ,new Answer("หญิง")
+                     )
+                );
+                questions.add(new Question("ประเภทหนัง" + "ที่คุณชอบ"
+                        ,new Answer("action","เลือดสาด")
+                        ,new Answer("ตลก")
+                        ,new Answer("อินดี้")
+                ));
+                questions.add(new Question("กีฬา" + "ที่คุณชอบ"));
+                questions.add(new Question("เพลง" + "ที่คุณชอบ"));
+                questions.add(new Question("เครื่องดื่ม" + "ที่คุณชอบ"));
+                questions.add(new Question("Notebook" + "ที่คุณชอบ"));
+                questions.add(new Question("ขนม" + "ที่คุณชอบ"));
+                questions.add(new Question("ศิลปิน" + "ที่คุณชอบ"));
+                questions.add(new Question("หนังสือ" + "ที่คุณชอบ"));
+                questions.add(new Question("วิชาเรียน" + "ที่คุณชอบ"));
+                questions.add(new Question("Brand เสื้อผ้า" + "ที่คุณชอบ"));
+                questions.add(new Question("งานอดิเรก"));
+                questions.add(new Question("สถานที่เที่ยว" + "ที่คุณชอบ"));
+
                 Log.e(this.getClass().getName(), questions.toString());
 
                 return questions;
@@ -134,6 +172,10 @@ public class QuestionActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Question question = questions.get(i);
+
+                if(!question.hasAnswer()){
+                    return;
+                }
 
                 Intent intent = new Intent(activity,AnswerActivity.class);
                 intent.putExtra("question",question);

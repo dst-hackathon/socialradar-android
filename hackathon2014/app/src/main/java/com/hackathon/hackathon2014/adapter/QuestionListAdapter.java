@@ -1,15 +1,20 @@
 package com.hackathon.hackathon2014.adapter;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.Question;
 
+import org.springframework.util.CollectionUtils;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,6 +55,15 @@ public class QuestionListAdapter extends BaseAdapter {
 
         TextView questionText = (TextView) view.findViewById(R.id.questionText);
         questionText.setText(item.getText());
+
+        ImageView questionNavigateIcon = (ImageView) view.findViewById(R.id.questionNavigateIcon);
+
+        if(item.hasAnswer()){
+            questionNavigateIcon.setVisibility(View.VISIBLE);
+        }else{
+            questionNavigateIcon.setVisibility(View.INVISIBLE);
+
+        }
 
         return view;
     }
