@@ -110,7 +110,7 @@ public class QuestionActivity extends Activity {
                     restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 
                     questions.addAll(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
-                } catch (RestClientException e) {
+                } catch (Exception e) {
                     Toast.makeText(getActivity().getBaseContext(),"Fail !!!!!!" + e.getMessage(), Toast.LENGTH_LONG ).show();
                 }
 
