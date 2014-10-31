@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.File;
 import java.util.Calendar;
 
 /**
@@ -74,14 +75,12 @@ public class SignUpActivity extends Activity {
                                 } else if (i == 1) {
                                     imagePath = Environment.getExternalStorageDirectory()
                                             + "/images/socialRadar/"
+                                            + String.valueOf(System.currentTimeMillis())
                                             + "uploadImage"
                                             + ".jpg";
 
-                                    Log.i("SignUpActivity", "image path: " + imagePath);
-
                                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imagePath);
-
 
                                     startActivityForResult(intent, RESULT_OPEN_CAMERA);
                                 }
@@ -116,10 +115,20 @@ public class SignUpActivity extends Activity {
 
             }
             else if (requestCode == RESULT_OPEN_CAMERA){
+                galleryAddPic();
                 Bitmap bitmap = (Bitmap) data.getExtras().get("data");
                 imageView.setImageBitmap(bitmap);
             }
         }
 
+    }
+
+    //not working yet
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(imagePath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 }
