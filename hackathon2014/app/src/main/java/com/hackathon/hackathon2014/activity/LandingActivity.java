@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.hackathon.hackathon2014.R;
-import com.hackathon.hackathon2014.SignUpActivity;
 
 
 public class LandingActivity extends Activity {
@@ -42,4 +42,9 @@ public class LandingActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+
+	public void onClick(View v) {
+		Intent intent = new Intent(this, LoginActivity.class);
+		startActivity(intent);
+	}
 }
