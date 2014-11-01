@@ -37,7 +37,6 @@
         android:layout_marginTop="27dp"
         android:background="@drawable/roundedlayout"
         android:orientation="vertical"
-        android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true">
 
         <EditText

@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.hackathon.hackathon2014.LoginUser;
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.utility.AlertMessageDialogue;
 
@@ -23,7 +25,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		boolean isLoggedIn = false;
+		boolean isLoggedIn = LoginUser.isLogin();
 
 		// Check if already login
 		if (isLoggedIn) {
@@ -72,7 +74,11 @@ public class LoginActivity extends Activity {
                 String password = passwordObj.getText().toString();
 
                 if (validateLogin(user, password)) {
-                    goToHomePage();
+
+                    if (LoginUser.login(user, password) )
+                    {
+                        goToHomePage();
+                    }
                 }
 
             }
