@@ -106,7 +106,8 @@ public class QuestionActivity extends Activity {
 
                     questions.addAll(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
                 } catch (Exception e) {
-//                    Toast.makeText(getActivity().getBaseContext(),"Fail !!!!!!" + e.getMessage(), Toast.LENGTH_LONG ).show();
+                    String error = "Fail !!!!!!" + e.getMessage();
+                    Log.e(this.getClass().getName(), error);
                 }
 
                 //MOCK
