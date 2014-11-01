@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="130dp">
 
     <ImageView
         android:id="@+id/questionIcon"
-        android:layout_width="94dp"
-        android:layout_height="94dp"
-        android:src="@drawable/ic_launcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="7dp"
+        android:src="@drawable/paper_plane"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
 
@@ -30,7 +31,6 @@
         android:src="@drawable/next"
         android:layout_centerVertical="true"
         android:cropToPadding="false"
-        android:layout_alignParentRight="true"
-        />
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>
