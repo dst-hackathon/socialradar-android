@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hackathon.hackathon2014.LoginUser;
@@ -28,6 +29,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -64,9 +66,13 @@ public class SignUpActivity extends Activity {
     }
 
     private void updateDisplayMode() {
+        TextView screentitle = (TextView) findViewById(R.id.screentitle);
+
         if (LoginUser.isLogin()) {
+            screentitle.setText("Edit Account");
             loadSignUpData();
         } else {
+            screentitle.setText("Setup New Account");
             clearControls();
         }
     }
@@ -235,7 +241,7 @@ public class SignUpActivity extends Activity {
 
         // Save a file: path for use with ACTION_VIEW intents
         _imagePath = "file:" + image.getAbsolutePath();
-//        _imagePath = image.getAbsolutePath();
+        _imagePath = image.getAbsolutePath();
         return image;
     }
 
