@@ -17,7 +17,7 @@ public class LoginUser {
         LoginUser.loginUser = loginUser;
     }
 
-    public boolean isLogin(){
+    public static boolean isLogin(){
         return loginUser!=null;
     }
 
