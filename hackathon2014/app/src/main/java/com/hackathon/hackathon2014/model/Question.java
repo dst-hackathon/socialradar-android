@@ -76,4 +76,13 @@ public class Question implements Serializable {
     public boolean hasCategories() {
         return !CollectionUtils.isEmpty(categories);
     }
+
+    public Category getCategory(Long id){
+        for (Category category : categories) {
+            if( category.getId().longValue() == id.longValue() ){
+                return category;
+            }
+        }
+        return null;
+    }
 }

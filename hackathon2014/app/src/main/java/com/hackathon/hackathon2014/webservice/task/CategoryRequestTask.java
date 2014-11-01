@@ -8,6 +8,11 @@ import com.hackathon.hackathon2014.model.Category;
 import com.hackathon.hackathon2014.model.Question;
 import com.hackathon.hackathon2014.webservice.PostRequestHandler;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -15,6 +20,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Krai on 11/1/14 AD.
@@ -22,7 +28,7 @@ import java.util.List;
 public class CategoryRequestTask extends AsyncTask<Question,Void,Question> {
 
     private final String url = "http://api.radar.codedeck.com/questions/";
-
+    private final String answerUrl = "http://api.radar.codedeck.com/users/1/answer";
     private RestTemplate restTemplate;
 
     private PostRequestHandler<Question> handler;
@@ -42,7 +48,33 @@ public class CategoryRequestTask extends AsyncTask<Question,Void,Question> {
         Log.e(this.getClass().getName(), "Make request to " + url + question.getId().toString());
 
         try {
-            return restTemplate.getForObject(url+question.getId().toString(), Question.class);
+            Question responseQuestion = restTemplate.getForObject(url + question.getId().toString(), Question.class);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setAccept(new ArrayList<MediaType>(Arrays.asList(MediaType.APPLICATION_JSON)));
+
+            HttpEntity httpEntity = new HttpEntity(headers);
+            ResponseEntity<Map> responseEntity = restTemplate.exchange(answerUrl, HttpMethod.GET,httpEntity,Map.class);
+
+            Map<String,Map<String,List<Integer>>> map = (Map<String,Map<String,List<Integer>>>)responseEntity.getBody();
+
+            if( map.containsKey(responseQuestion.getId().toString())){
+
+                Map<String,List<Integer>> checkedCategory = map.get(responseQuestion.getId().toString());
+
+                for (String categoryId : checkedCategory.keySet()) {
+
+                    Category category = responseQuestion.getCategory(Long.valueOf(categoryId));
+                    List<Integer> selectedOptionIds = checkedCategory.get(categoryId);
+
+                    if( selectedOptionIds.size() > 0 ){
+                        category.checkOptions(selectedOptionIds);
+                        category.setOptionChecked(true);
+                    }
+                }
+            }
+
+            return responseQuestion;
         } catch (Exception e) {
             String error = "Fail !!!!!!" + e.getMessage();
             Log.e(this.getClass().getName(), error);

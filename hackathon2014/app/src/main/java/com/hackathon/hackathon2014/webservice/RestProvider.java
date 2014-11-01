@@ -4,6 +4,7 @@ import com.hackathon.hackathon2014.model.Category;
 import com.hackathon.hackathon2014.model.Question;
 import com.hackathon.hackathon2014.webservice.task.CategoryRequestTask;
 import com.hackathon.hackathon2014.webservice.task.QuestionRequestTask;
+import com.hackathon.hackathon2014.webservice.task.SubmitAnswerRequestTask;
 
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +34,11 @@ public class RestProvider {
     public static void getCategories(Question question,PostRequestHandler<Question> handler)
     {
         new CategoryRequestTask(getInstance(),handler).execute(question);
+    }
+
+    public static void postAnswer(Question question, PostRequestHandler<Boolean> handler)
+    {
+        new SubmitAnswerRequestTask(getInstance(),handler).execute(question);
     }
 
 }

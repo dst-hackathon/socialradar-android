@@ -21,7 +21,6 @@ import com.hackathon.hackathon2014.model.Option;
 import com.hackathon.hackathon2014.model.Question;
 import com.hackathon.hackathon2014.webservice.PostRequestHandler;
 import com.hackathon.hackathon2014.webservice.RestProvider;
-import com.hackathon.hackathon2014.webservice.task.CategoryRequestTask;
 
 import org.springframework.util.CollectionUtils;
 
@@ -33,7 +32,7 @@ public class CategoryActivity extends Activity {
     public static String BUNDLE_CATEGORY = "category";
     public static String BUNDLE_QUESTION = "question";
 
-    public static String FRAGMENT_ANSWERS = "answerFragment";
+    public static String FRAGMENT_OPTION = "optionFragment";
     public static String FRAGMENT_CATEGORY = "categoryFragment";
 
     @Override
@@ -147,7 +146,7 @@ public class CategoryActivity extends Activity {
             fragment.setArguments(bundle);
 
             final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.answerContainer, fragment, FRAGMENT_ANSWERS);
+            transaction.replace(R.id.answerContainer, fragment, FRAGMENT_OPTION);
             transaction.addToBackStack(null);
             transaction.commit();
         }
@@ -180,14 +179,30 @@ public class CategoryActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getFragmentManager().findFragmentByTag(FRAGMENT_ANSWERS);
 
-        if(fragment instanceof OptionListFragment){
-            Category category = ((OptionListFragment) fragment).getCategory();
+        if(isOptionFragment()){
+            OptionListFragment fragment = (OptionListFragment)getFragmentManager().findFragmentByTag(FRAGMENT_OPTION);
+
+            Category category = fragment.getCategory();
             category.setOptionChecked(atLeastOneOptionChecked(category.getOptions()));
+        }else if(isCategoryFragment()){
+            CategoryListFragment fragment = (CategoryListFragment)getFragmentManager().findFragmentByTag(FRAGMENT_CATEGORY);
+            RestProvider.postAnswer(fragment.getQuestion(),new PostRequestHandler<Boolean>() {
+                @Override
+                public void handle(Boolean isSuccess) {
+                    Log.e(this.getClass().getName(), "Result of Submit answer " + isSuccess);
+                }
+            });
         }
 
         super.onBackPressed();
+    }
+
+    private boolean isOptionFragment(){
+        return getFragmentManager().findFragmentByTag(FRAGMENT_OPTION) != null;
+    }
+    private boolean isCategoryFragment(){
+        return getFragmentManager().findFragmentByTag(FRAGMENT_CATEGORY) != null;
     }
 
     private boolean atLeastOneOptionChecked(List<Option> options)
