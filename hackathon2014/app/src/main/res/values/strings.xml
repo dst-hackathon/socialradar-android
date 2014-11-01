@@ -20,7 +20,8 @@
     <string name="login_button_name">Log in</string>
     <string name="login_str">Log in</string>
     <string name="password_hint">Password</string>
-    <string name="signup_msg">Do not have an account? <a>Signup</a></string>
+    <string name="signup_str"><a href="#">Signup</a></string>
+    <string name="intro_signup_msg">Do not have an account?</string>
     <string name="facebook_desc">Login with Facebook user</string>
     <string name="forget_password_msg">Forget your password?</string>
     
