@@ -2,6 +2,7 @@
 <resources>
 
     <color name="background">#ffcf79</color>
+    <color name="activityBar">#fd800a</color>
     <color name="text">#454545</color>
     <color name="textFieldColor">#000</color>
     <color name="buttonText">#fff</color>
