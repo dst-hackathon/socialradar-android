@@ -17,10 +17,18 @@
         <activity
             android:name=".activity.LandingActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/login_page_name" >
+            <intent-filter>
+                <action android:name="com.tutorial.CLEARSCREEN" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".activity.SignUpActivity"
