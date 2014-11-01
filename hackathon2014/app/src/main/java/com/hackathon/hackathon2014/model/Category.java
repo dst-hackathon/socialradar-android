@@ -16,6 +16,8 @@ public class Category implements Serializable {
 
     private String text;
 
+    private boolean optionChecked;
+
     List<Option> options;
 
     public Category() {
@@ -59,6 +61,14 @@ public class Category implements Serializable {
 
     public void setOptions(List<Option> options) {
         this.options = options;
+    }
+
+    public boolean isOptionChecked() {
+        return optionChecked;
+    }
+
+    public void setOptionChecked(boolean optionChecked) {
+        this.optionChecked = optionChecked;
     }
 
     @Override
