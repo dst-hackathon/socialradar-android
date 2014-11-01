@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 
 import com.hackathon.hackathon2014.R;
@@ -18,6 +19,10 @@ public class HomeActivity extends Activity implements ProfileFragment.ControlInt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.home_activity);
     }
     
@@ -26,7 +31,7 @@ public class HomeActivity extends Activity implements ProfileFragment.ControlInt
     	super.onStart();
     	if( getResources().getConfiguration().ORIENTATION_LANDSCAPE == getResources().getConfiguration().orientation  ) {
 			SearchResultsFragment frag = (SearchResultsFragment) getFragmentManager().findFragmentById(R.id.search_result);
-			//frag.getList();
+			frag.getList();
 		}
     }
 
@@ -49,7 +54,7 @@ public class HomeActivity extends Activity implements ProfileFragment.ControlInt
 		
 		if( getResources().getConfiguration().ORIENTATION_LANDSCAPE == getResources().getConfiguration().orientation  ) {
 			SearchResultsFragment frag = (SearchResultsFragment) getFragmentManager().findFragmentById(R.id.search_result);
-			//frag.getList();
+			frag.getList();
 		} else {
 	      Intent intent = new Intent(this, SearchFriendsActivity.class);
           startActivity(intent);

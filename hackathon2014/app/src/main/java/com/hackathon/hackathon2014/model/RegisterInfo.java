@@ -5,10 +5,11 @@ package com.hackathon.hackathon2014.model;
  */
 public class RegisterInfo {
     private String displayName;
+    private int id;
     private String username;
     private String password;
     private String email;
-    private byte[] image;
+    private byte[] file;
 
     public String getDisplayName() {
         return displayName;
@@ -16,6 +17,14 @@ public class RegisterInfo {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -42,11 +51,11 @@ public class RegisterInfo {
         this.email = email;
     }
 
-    public byte[] getImage() {
-        return image;
+    public byte[] getFile() {
+        return file;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 }

@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.FriendModel;
+import com.hackathon.hackathon2014.utility.ImageDownloader;
 
 import java.util.List;
 
@@ -48,10 +50,12 @@ public class FriendAdapter extends BaseAdapter {
 		    convertView = inflater.inflate(R.layout.search_results_fragment_item, null);
 		
 		TextView secondLine = ( TextView ) convertView.findViewById(R.id.secondLine);
+        ImageView userAvatar = ( ImageView ) convertView.findViewById(R.id.user_avatar);
 		FriendModel f = data.get(position);
 		
 		secondLine.setText(f.getName());
-		
+        new ImageDownloader( userAvatar ).execute( "http://api.radar.codedeck.com/users/" + f.getId() +  "/avatar" );
+
 		return convertView;
 	}
 
