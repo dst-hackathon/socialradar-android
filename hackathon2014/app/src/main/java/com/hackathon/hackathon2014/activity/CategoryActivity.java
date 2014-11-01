@@ -19,6 +19,9 @@ import com.hackathon.hackathon2014.adapter.OptionListAdapter;
 import com.hackathon.hackathon2014.model.Category;
 import com.hackathon.hackathon2014.model.Option;
 import com.hackathon.hackathon2014.model.Question;
+import com.hackathon.hackathon2014.webservice.PostRequestHandler;
+import com.hackathon.hackathon2014.webservice.RestProvider;
+import com.hackathon.hackathon2014.webservice.task.CategoryRequestTask;
 
 import org.springframework.util.CollectionUtils;
 
@@ -28,6 +31,8 @@ import java.util.List;
 public class CategoryActivity extends Activity {
 
     public static String BUNDLE_CATEGORY = "category";
+    public static String BUNDLE_QUESTION = "question";
+
     public static String FRAGMENT_ANSWERS = "answerFragment";
 
     @Override
@@ -35,9 +40,15 @@ public class CategoryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
 
+        Question question = (Question)getIntent().getSerializableExtra(QuestionActivity.EXTRA_QUESTION);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(BUNDLE_QUESTION,question);
+
         if (savedInstanceState == null) {
+            CategoryListFragment categoryListFragment = new CategoryListFragment();
+            categoryListFragment.setArguments(bundle);
             getFragmentManager().beginTransaction()
-                    .add(R.id.answerContainer, new CategoryListFragment(),FRAGMENT_ANSWERS)
+                    .add(R.id.answerContainer, categoryListFragment,FRAGMENT_ANSWERS)
                     .commit();
         }
     }
@@ -63,25 +74,42 @@ public class CategoryActivity extends Activity {
 
     public static class CategoryListFragment extends Fragment
     {
+        private Question question;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_answer, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_answer, container, false);
 
-            Question question = getQuestion();
+            if( question == null ){
+                question = getQuestion();
+            }
 
-            CategoryListAdapter categoryListAdapter = new CategoryListAdapter(this.getActivity(), question.getCategories());
-
-            ListView listView = (ListView) rootView.findViewById(R.id.answerListView);
-            listView.setAdapter(categoryListAdapter);
-
-            listView.setOnItemClickListener(new OpenNestedAnswerEvent(question.getCategories()));
+            if( question.getCategories() == null ){
+                RestProvider.getCategories(question,new PostRequestHandler<Question>() {
+                    @Override
+                    public void handle(Question question) {
+                        renderListView(rootView,question);
+                    }
+                });
+            }else{
+                renderListView(rootView,question);
+            }
 
             return rootView;
         }
 
+        private void renderListView(View view,Question question){
+            CategoryListAdapter categoryListAdapter = new CategoryListAdapter(getActivity(), question.getCategories());
+
+            ListView listView = (ListView) view.findViewById(R.id.answerListView);
+            listView.setAdapter(categoryListAdapter);
+
+            listView.setOnItemClickListener(new OpenNestedAnswerEvent(question.getCategories()));
+        }
+
         private Question getQuestion() {
-            return (Question) getActivity().getIntent().getSerializableExtra(QuestionActivity.EXTRA_QUESTION);
+            return (Question)getArguments().getSerializable(BUNDLE_QUESTION);
         }
 
         private class OpenNestedAnswerEvent implements android.widget.AdapterView.OnItemClickListener {
@@ -154,7 +182,6 @@ public class CategoryActivity extends Activity {
         if(fragment instanceof OptionListFragment){
             Category category = ((OptionListFragment) fragment).getCategory();
             category.setOptionChecked(atLeastOneOptionChecked(category.getOptions()));
-
         }
 
         super.onBackPressed();
