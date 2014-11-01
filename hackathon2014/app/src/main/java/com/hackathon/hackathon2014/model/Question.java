@@ -21,6 +21,8 @@ public class Question implements Serializable {
 
     private List<Category> categories;
 
+    private boolean selected = false;
+
     public Question() {
     }
 
@@ -75,6 +77,14 @@ public class Question implements Serializable {
 
     public boolean hasCategories() {
         return !CollectionUtils.isEmpty(categories);
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
     public Category getCategory(Long id){

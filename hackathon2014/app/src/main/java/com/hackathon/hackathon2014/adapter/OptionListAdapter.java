@@ -1,17 +1,13 @@
 package com.hackathon.hackathon2014.adapter;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hackathon.hackathon2014.AnswerHolder;
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.Option;
 
@@ -58,22 +54,15 @@ public class OptionListAdapter extends BaseAdapter {
         TextView answerText = (TextView) view.findViewById(R.id.answerText);
         answerText.setText(option.getText());
 
-        final CheckBox answerCheckbox = (CheckBox) view.findViewById(R.id.answerCheckButton);
+        final ImageView answerImage = (ImageView) view.findViewById(R.id.answerCheckButton);
 
-        answerCheckbox.setOnCheckedChangeListener(null);
+        renderLike(option, answerImage);
 
-        answerCheckbox.setChecked(option.isChecked());
-
-        answerCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                Log.e("com.hackathon.hackathon2014", "option id " + option.getId() + " : " + option.getText());
-                Log.e("com.hackathon.hackathon2014", "check " + b);
-                Log.e("com.hackathon.hackathon2014", "change from  " + option.isChecked() + " to " + b);
-
-                option.setChecked(b);
-                Log.e("com.hackathon.hackathon2014", "All  " + AnswerHolder.getAll());
+            public void onClick(View view) {
+                option.toggleChecked();
+                renderLike(option, answerImage);
             }
         });
 
@@ -81,5 +70,13 @@ public class OptionListAdapter extends BaseAdapter {
         imageView.setVisibility(View.INVISIBLE);
 
         return view;
+    }
+
+    private void renderLike(Option option, ImageView answerImage) {
+        if(option.isChecked()){
+            answerImage.setImageResource(R.drawable.like);
+        }else{
+            answerImage.setImageResource(R.drawable.unlike);
+        }
     }
 }

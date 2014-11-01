@@ -12,8 +12,8 @@
         <item>Camera</item>
     </string-array>
 
-    <string name="title_activity_question">QuestionActivity</string>
-    <string name="title_activity_answer">AnswerActivity</string>
+    <string name="title_activity_question">Question</string>
+    <string name="title_activity_answer">Answer</string>
 
     <string name="login_page_name">Login</string>
     <string name="username_hint">Username</string>
@@ -25,5 +25,7 @@
     <string name="facebook_desc">Login with Facebook user</string>
     <string name="forget_password_msg">Forget your password?</string>
     <string name="loading_str">loading ... please wait a moment</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
 
 </resources>

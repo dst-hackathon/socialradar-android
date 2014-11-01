@@ -43,7 +43,7 @@ public class QuestionListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        Question item = getItem(i);
+        final Question item = getItem(i);
 
         if (view == null) {
             view = LayoutInflater.from(activity).inflate(R.layout.question_row, null);
@@ -58,9 +58,19 @@ public class QuestionListAdapter extends BaseAdapter {
             questionNavigateIcon.setVisibility(View.VISIBLE);
         }else{
             questionNavigateIcon.setVisibility(View.INVISIBLE);
-
         }
 
+        final ImageView questionIcon = (ImageView) view.findViewById(R.id.questionIcon);
+        renderChecked(item.isSelected(), questionIcon, R.drawable.ok_enable, R.drawable.ok_disable);
+
         return view;
+    }
+
+    public static void renderChecked(boolean condition, ImageView imageView, int enable, int disable) {
+        if(condition){
+            imageView.setImageResource(enable);
+        }else{
+            imageView.setImageResource(disable);
+        }
     }
 }
