@@ -1,8 +1,6 @@
 package com.hackathon.hackathon2014.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by keerati on 10/31/14 AD.
@@ -68,5 +66,9 @@ public class Option implements Serializable {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public void toggleChecked() {
+        checked = !checked;
     }
 }

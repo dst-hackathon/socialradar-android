@@ -52,13 +52,13 @@
 
         <activity
             android:name=".activity.HomeActivity"
-            android:label="Home" >
+            android:label="@string/title_home" >
         </activity>
 
 
         <activity
             android:name=".activity.SearchFriendsActivity"
-            android:label="Search"
+            android:label="@string/title_search"
             >
         </activity>
 

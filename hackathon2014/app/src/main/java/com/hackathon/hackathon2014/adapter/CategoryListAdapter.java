@@ -59,9 +59,13 @@ public class CategoryListAdapter extends BaseAdapter {
         TextView answerText = (TextView) view.findViewById(R.id.answerText);
         answerText.setText(category.getText());
 
-        CheckBox checkBox = (CheckBox)view.findViewById(R.id.answerCheckButton);
-        checkBox.setClickable(false);
-        checkBox.setChecked(category.isOptionChecked());
+        ImageView answerCheckIcon = (ImageView)view.findViewById(R.id.answerCheckButton);
+
+        if(category.isOptionChecked()){
+            answerCheckIcon.setImageResource(R.drawable.like);
+        }else{
+            answerCheckIcon.setImageResource(R.drawable.unlike);
+        }
 
         return view;
     }

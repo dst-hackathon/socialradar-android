@@ -25,5 +25,7 @@
     <string name="facebook_desc">Login with Facebook user</string>
     <string name="forget_password_msg">Forget your password?</string>
     <string name="loading_str">loading ... please wait a moment</string>
+    <string name="title_home">Home</string>
+    <string name="title_search">Search</string>
 
 </resources>
