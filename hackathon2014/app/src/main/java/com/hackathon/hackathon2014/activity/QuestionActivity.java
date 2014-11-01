@@ -16,16 +16,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.utility.RestProvider;
 import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
-import com.hackathon.hackathon2014.model.Answer;
+import com.hackathon.hackathon2014.model.Option;
 import com.hackathon.hackathon2014.model.Question;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -106,37 +101,36 @@ public class QuestionActivity extends Activity {
                 List<Question> questions = new ArrayList<Question>();
 
                 try {
-                    RestTemplate restTemplate = new RestTemplate();
-                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
+                    RestTemplate restTemplate = RestProvider.getInstance();
                     questions.addAll(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
                 } catch (Exception e) {
-                    Toast.makeText(getActivity().getBaseContext(),"Fail !!!!!!" + e.getMessage(), Toast.LENGTH_LONG ).show();
+                    String error = "Fail !!!!!!" + e.getMessage();
+                    Log.e(this.getClass().getName(), error);
                 }
 
                 //MOCK
                 questions.add(
                      new Question("อาหาร" + "ที่คุณชอบ"
-                         ,new Answer("ญี่ปุ่น","เทปันยากิ","ซูชิ")
-                         ,new Answer("จีน","พระกระโดดกำแพง","หูฉลามน้ำแดง","ติ่มซำ","กระเพาะปลาผัดแห้ง","กระเพาะปลาน้ำแดง","ขาหมูหมั่นโถว")
-                         ,new Answer("ไทย","กระเพราไข่ดาว", "แกงป้า")
-                         ,new Answer("อินเดีย")
-                         ,new Answer("เกาหลี")
-                         ,new Answer("อิตาเลี่ยน" ,"พิซซ่า","สปาเกตตี้")
+                         ,new Option("ญี่ปุ่น","เทปันยากิ","ซูชิ")
+                         ,new Option("จีน","พระกระโดดกำแพง","หูฉลามน้ำแดง","ติ่มซำ","กระเพาะปลาผัดแห้ง","กระเพาะปลาน้ำแดง","ขาหมูหมั่นโถว")
+                         ,new Option("ไทย","กระเพราไข่ดาว", "แกงป้า")
+                         ,new Option("อินเดีย")
+                         ,new Option("เกาหลี")
+                         ,new Option("อิตาเลี่ยน" ,"พิซซ่า","สปาเกตตี้")
                      )
                 );
                 questions.add(new Question("สี" + "ที่คุณชอบ"));
                 questions.add(new Question("สัตว์" + "ที่คุณชอบ"));
                 questions.add(new Question("Mobile" + "ที่คุณชอบ"));
                 questions.add(new Question("เพศ" + "ที่คุณชอบ"
-                     ,new Answer("ชาย")
-                     ,new Answer("หญิง")
+                     ,new Option("ชาย")
+                     ,new Option("หญิง")
                      )
                 );
                 questions.add(new Question("ประเภทหนัง" + "ที่คุณชอบ"
-                        ,new Answer("action","เลือดสาด")
-                        ,new Answer("ตลก")
-                        ,new Answer("อินดี้")
+                        ,new Option("action","เลือดสาด")
+                        ,new Option("ตลก")
+                        ,new Option("อินดี้")
                 ));
                 questions.add(new Question("กีฬา" + "ที่คุณชอบ"));
                 questions.add(new Question("เพลง" + "ที่คุณชอบ"));

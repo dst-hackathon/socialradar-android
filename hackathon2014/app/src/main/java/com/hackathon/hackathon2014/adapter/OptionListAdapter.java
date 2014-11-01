@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.hackathon.hackathon2014.AnswerHolder;
 import com.hackathon.hackathon2014.R;
-import com.hackathon.hackathon2014.model.Answer;
+import com.hackathon.hackathon2014.model.Option;
 
 import org.springframework.util.CollectionUtils;
 
@@ -22,24 +22,24 @@ import java.util.List;
 /**
  * Created by keerati on 10/31/14 AD.
  */
-public class AnswerListAdapter extends BaseAdapter {
+public class OptionListAdapter extends BaseAdapter {
 
-    private List<Answer> answers;
+    private List<Option> options;
     private Activity activity;
 
-    public AnswerListAdapter(Activity activity, List<Answer> answers) {
-        this.answers = answers;
+    public OptionListAdapter(Activity activity, List<Option> options) {
+        this.options = options;
         this.activity = activity;
     }
 
     @Override
     public int getCount() {
-        return CollectionUtils.isEmpty(answers) ? 0 : answers.size();
+        return CollectionUtils.isEmpty(options) ? 0 : options.size();
     }
 
     @Override
-    public Answer getItem(int i) {
-        return answers.get(i);
+    public Option getItem(int i) {
+        return options.get(i);
     }
 
     @Override
@@ -49,38 +49,38 @@ public class AnswerListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        final Answer answer = getItem(i);
+        final Option option = getItem(i);
 
         if (view == null) {
             view = LayoutInflater.from(activity).inflate(R.layout.answer_row, null);
         }
 
         TextView answerText = (TextView) view.findViewById(R.id.answerText);
-        answerText.setText(answer.getText());
+        answerText.setText(option.getText());
 
         final CheckBox answerCheckbox = (CheckBox) view.findViewById(R.id.answerCheckButton);
 
         answerCheckbox.setOnCheckedChangeListener(null);
 
-        answerCheckbox.setChecked(answer.isChecked());
+        answerCheckbox.setChecked(option.isChecked());
 
         answerCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                Log.e("com.hackathon.hackathon2014", "answer id " + answer.getId() + " : " + answer.getText());
+                Log.e("com.hackathon.hackathon2014", "option id " + option.getId() + " : " + option.getText());
                 Log.e("com.hackathon.hackathon2014", "check " + b);
-                Log.e("com.hackathon.hackathon2014", "change from  " + answer.isChecked() + " to " + b);
+                Log.e("com.hackathon.hackathon2014", "change from  " + option.isChecked() + " to " + b);
 
-                answer.setChecked(b);
-                AnswerHolder.add(answer);
+                option.setChecked(b);
+                AnswerHolder.add(option);
 
                 Log.e("com.hackathon.hackathon2014", "All  " + AnswerHolder.getAll());
             }
         });
 
         ImageView imageView = (ImageView) view.findViewById(R.id.nextButton);
-        if (CollectionUtils.isEmpty(answer.getAnswers())) {
+        if (CollectionUtils.isEmpty(option.getOptions())) {
             imageView.setVisibility(View.INVISIBLE);
         } else {
             imageView.setVisibility(View.VISIBLE);

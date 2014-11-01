@@ -7,21 +7,21 @@ import java.util.List;
 /**
  * Created by keerati on 10/31/14 AD.
  */
-public class Answer implements Serializable{
+public class Option implements Serializable{
 
     static long i = 0;
 
     private Long id;
     private String text;
-    private List<Answer> answers = new ArrayList<Answer>();
+    private List<Option> options = new ArrayList<Option>();
     private boolean checked;
 
-    public Answer(String text, String... answers) {
+    public Option(String text, String... answers) {
         id = i++;
         this.text = text;
 
         for (String answer : answers) {
-            this.answers.add(new Answer(answer));
+            this.options.add(new Option(answer));
         }
     }
 
@@ -33,12 +33,12 @@ public class Answer implements Serializable{
         this.text = text;
     }
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public List<Option> getOptions() {
+        return options;
     }
 
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 
     public Long getId() {
@@ -54,9 +54,9 @@ public class Answer implements Serializable{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Answer answer = (Answer) o;
+        Option option = (Option) o;
 
-        if (!id.equals(answer.id)) return false;
+        if (!id.equals(option.id)) return false;
 
         return true;
     }
