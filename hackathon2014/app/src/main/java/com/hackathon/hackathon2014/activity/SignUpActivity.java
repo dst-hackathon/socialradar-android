@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hackathon.hackathon2014.LoginUser;
@@ -28,6 +29,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
+import org.w3c.dom.Text;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -45,7 +47,7 @@ public class SignUpActivity extends Activity {
     private final int RESULT_OPEN_CAMERA = 2;
 
     private final String BASE_SERVICE_URL = "http://api.radar.codedesk.com";
-    private final String LOGIN_SERVICE_URL = "";
+    private final String SIGNUP_SERVICE_URL = "/signup";
     private final String POST_AVATAR_SERVICE_URL = "/users/{id}/avatar";
     private final String GET_AVATAR_SERVICE_URL = "/users{id}/avatar";
 
@@ -64,9 +66,13 @@ public class SignUpActivity extends Activity {
     }
 
     private void updateDisplayMode() {
+        TextView screentitle = (TextView) findViewById(R.id.screentitle);
+
         if (LoginUser.isLogin()) {
+            screentitle.setText("Edit Account");
             loadSignUpData();
         } else {
+            screentitle.setText("Setup New Account");
             clearControls();
         }
     }
@@ -173,7 +179,7 @@ public class SignUpActivity extends Activity {
         httpHeaders.setAccept(mediaTypes);
         HttpEntity<String> httpEntity = new HttpEntity<String>(null, httpHeaders);
 
-        RegisterInfo res = restTemplate.postForObject(LOGIN_SERVICE_URL, registerInfo, RegisterInfo.class, httpEntity);
+        RegisterInfo res = restTemplate.postForObject(SIGNUP_SERVICE_URL, registerInfo, RegisterInfo.class, httpEntity);
     }
 
     private void loadSignUpData() {
@@ -288,7 +294,7 @@ public class SignUpActivity extends Activity {
         Bitmap bitmap = Bitmap.createBitmap(_imageView.getDrawingCache());
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-        registerInfo.setImage(stream.toByteArray());
+        registerInfo.setFile(stream.toByteArray());
         return registerInfo;
     }
 }

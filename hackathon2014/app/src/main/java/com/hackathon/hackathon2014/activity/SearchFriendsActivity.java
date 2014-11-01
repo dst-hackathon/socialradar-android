@@ -23,6 +23,6 @@ public class SearchFriendsActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		SearchResultsFragment frag = (SearchResultsFragment) getFragmentManager().findFragmentById(R.id.search_result);
-
+        frag.getList();
 	}
 }

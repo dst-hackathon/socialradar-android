@@ -8,7 +8,7 @@ public class RegisterInfo {
     private String username;
     private String password;
     private String email;
-    private byte[] image;
+    private byte[] file;
 
     public String getDisplayName() {
         return displayName;
@@ -42,11 +42,11 @@ public class RegisterInfo {
         this.email = email;
     }
 
-    public byte[] getImage() {
-        return image;
+    public byte[] getFile() {
+        return file;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setFile(byte[] file) {
+        this.file = file;
     }
 }
