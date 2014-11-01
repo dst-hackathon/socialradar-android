@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.hackathon.hackathon2014.R;
@@ -35,7 +36,6 @@ public class QuestionActivity extends Activity {
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -96,9 +96,14 @@ public class QuestionActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Question question = questions.get(i);
+                question.setSelected(true);
+
                 Intent intent = new Intent(activity,CategoryActivity.class);
-                intent.putExtra(EXTRA_QUESTION,question);
+                intent.putExtra(EXTRA_QUESTION, question);
                 activity.startActivity(intent);
+
+                final ImageView questionIcon = (ImageView) view.findViewById(R.id.questionIcon);
+                QuestionListAdapter.renderChecked(question.isSelected(), questionIcon, R.drawable.ok_enable, R.drawable.ok_disable);
             }
         }
     }
