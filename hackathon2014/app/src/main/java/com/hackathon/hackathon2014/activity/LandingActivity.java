@@ -7,6 +7,9 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.widget.TextView;
 
 import com.hackathon.hackathon2014.R;
 
@@ -18,6 +21,7 @@ public class LandingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
+        blinkLoadingText();
 
         /****** Create Thread that will sleep for 5 seconds *************/
         Thread background = new Thread() {
@@ -45,7 +49,16 @@ public class LandingActivity extends Activity {
         background.start();
     }
 
+    public void blinkLoadingText(){
+        TextView myText = (TextView) findViewById(R.id.loading );
 
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(100); //You can manage the time of the blink with this parameter
+        anim.setStartOffset(50);
+        anim.setRepeatMode(Animation.REVERSE);
+        anim.setRepeatCount(Animation.INFINITE);
+        myText.startAnimation(anim);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
