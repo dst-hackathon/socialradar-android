@@ -25,20 +25,27 @@ import com.hackathon.hackathon2014.LoginUser;
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.RegisterInfo;
 import com.hackathon.hackathon2014.utility.ImageDownloader;
+import com.hackathon.hackathon2014.webservice.PostRequestHandler;
+import com.hackathon.hackathon2014.webservice.RestProvider;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.Text;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by smileyOpal on 10/31/14.
@@ -46,15 +53,18 @@ import java.util.List;
 public class SignUpActivity extends Activity {
     private final int RESULT_LOAD_IMAGE = 1;
     private final int RESULT_OPEN_CAMERA = 2;
+    private final String MODE_REGISTER = "MODE_REGISTER";
+    private final String MODE_EDIT = "MODE_EDIT";
 
-    private final String BASE_SERVICE_URL = "http://api.radar.codedesk.com";
-    private final String SIGNUP_SERVICE_URL = "/signup";
-    private final String POST_AVATAR_SERVICE_URL = "/users/{id}/avatar";
-    private final String GET_AVATAR_SERVICE_URL = "/users{id}/avatar";
+    private final String BASE_SERVICE_URL = "http://api.radar.codedeck.com";
+    private final String SIGNUP_SERVICE_URL = BASE_SERVICE_URL + "/signup";
+    private final String POST_AVATAR_SERVICE_URL = BASE_SERVICE_URL + "/users/{id}/avatar";
+    private final String GET_AVATAR_SERVICE_URL = BASE_SERVICE_URL + "/users{id}/avatar";
 
     private ImageView _imageView;
 
     private String _imagePath;
+    private String mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +81,11 @@ public class SignUpActivity extends Activity {
 
         if (LoginUser.isLogin()) {
             screentitle.setText("Edit Account");
+            mode = MODE_EDIT;
             loadSignUpData();
         } else {
             screentitle.setText("Setup New Account");
+            mode = MODE_REGISTER;
             clearControls();
         }
     }
@@ -123,7 +135,7 @@ public class SignUpActivity extends Activity {
 
     ////////////////////////////////
 
-    private void setImageIcon(String imagePath){
+    private void setImageIcon(String imagePath) {
         ImageView imageView = (ImageView) findViewById(R.id.imageIcon);
         imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
     }
@@ -171,22 +183,24 @@ public class SignUpActivity extends Activity {
     }
 
     private void submitRequest(RegisterInfo registerInfo) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        List<MediaType> mediaTypes = new ArrayList<MediaType>();
-        mediaTypes.add(MediaType.APPLICATION_JSON);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setAccept(mediaTypes);
-        HttpEntity<String> httpEntity = new HttpEntity<String>(null, httpHeaders);
-
-        RegisterInfo res = restTemplate.postForObject(SIGNUP_SERVICE_URL, registerInfo, RegisterInfo.class, httpEntity);
+        RestProvider.requestSignUp(registerInfo, new PostRequestHandler<String>() {
+            @Override
+            public void handle(String result) {
+                if ("success".equals(result)) {
+                    if (MODE_REGISTER.equals(mode)) {
+                        startActivity(new Intent(SignUpActivity.this, QuestionActivity.class));
+                    }
+                } else {
+                    displayToast("Unable to signup new account, please try again later!");
+                }
+            }
+        });
     }
 
     private void loadSignUpData() {
         //get userid
         //get register information from user id
-        new ImageDownloader( _imageView ).execute( "http://api.radar.codedeck.com/users/" + 2 +  "/avatar" );
+        new ImageDownloader(_imageView).execute("http://api.radar.codedeck.com/users/" + 2 + "/avatar");
     }
 
     /////////////////////////////////
@@ -292,10 +306,20 @@ public class SignUpActivity extends Activity {
         registerInfo.setPassword(getEditTextValue(password));
         registerInfo.setEmail(getEditTextValue(email));
 
-        Bitmap bitmap = Bitmap.createBitmap(_imageView.getDrawingCache());
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-        registerInfo.setFile(stream.toByteArray());
+        registerInfo.setFile(new File(_imagePath));
         return registerInfo;
+    }
+
+    private MultipartEntity buildMultipartEntity(RegisterInfo registerInfo) {
+        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+        try {
+            entity.addPart("email", new StringBody(registerInfo.getEmail()));
+            entity.addPart("password", new StringBody(registerInfo.getPassword()));
+            entity.addPart("file", new FileBody(registerInfo.getFile(), "images/jpg"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return entity;
     }
 }

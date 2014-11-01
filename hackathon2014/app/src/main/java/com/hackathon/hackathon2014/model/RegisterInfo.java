@@ -1,5 +1,7 @@
 package com.hackathon.hackathon2014.model;
 
+import java.io.File;
+
 /**
  * Created by smileyOpal on 10/31/14.
  */
@@ -9,7 +11,7 @@ public class RegisterInfo {
     private String username;
     private String password;
     private String email;
-    private byte[] file;
+    private File file;
 
     public String getDisplayName() {
         return displayName;
@@ -51,11 +53,11 @@ public class RegisterInfo {
         this.email = email;
     }
 
-    public byte[] getFile() {
+    public File getFile() {
         return file;
     }
 
-    public void setFile(byte[] file) {
+    public void setFile(File file) {
         this.file = file;
     }
 }
