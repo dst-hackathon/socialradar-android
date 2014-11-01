@@ -28,7 +28,7 @@ import java.util.Map;
 public class CategoryRequestTask extends AsyncTask<Question,Void,Question> {
 
     private final String url = "http://api.radar.codedeck.com/questions/";
-    private final String answerUrl = "http://api.radar.codedeck.com/users/1/answer";
+    private final String answerUrl = "http://api.radar.codedeck.com/users/2/answer";
     private RestTemplate restTemplate;
 
     private PostRequestHandler<Question> handler;
@@ -63,11 +63,10 @@ public class CategoryRequestTask extends AsyncTask<Question,Void,Question> {
                 Map<String,List<Integer>> checkedCategory = map.get(responseQuestion.getId().toString());
 
                 for (String categoryId : checkedCategory.keySet()) {
-
-                    Category category = responseQuestion.getCategory(Long.valueOf(categoryId));
                     List<Integer> selectedOptionIds = checkedCategory.get(categoryId);
 
                     if( selectedOptionIds.size() > 0 ){
+                        Category category = responseQuestion.getCategory(Long.valueOf(categoryId));
                         category.checkOptions(selectedOptionIds);
                         category.setOptionChecked(true);
                     }
