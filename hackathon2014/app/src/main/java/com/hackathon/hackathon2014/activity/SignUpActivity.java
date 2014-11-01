@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.hackathon.hackathon2014.LoginUser;
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.RegisterInfo;
 
@@ -48,38 +49,25 @@ public class SignUpActivity extends Activity {
     private final String POST_AVATAR_SERVICE_URL = "/users/{id}/avatar";
     private final String GET_AVATAR_SERVICE_URL = "/users{id}/avatar";
 
-    public static final String SIGNUP_MODE = "SIGNUP_MODE";
-    public static final String MODE_NEW_ACCT = "MODE_NEW_ACCT";
-    public static final String MODE_EDIT_ACCT = "MODE_EDIT_ACCT";
-
     private ImageView _imageView;
-    private Button _signupButton;
 
     private String _imagePath;
-    private String mode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        updateDisplayMode(getIntent().getExtras());
+        updateDisplayMode();
         setImageIconAction();
         setSignUpButtonAction();
     }
 
-    private void updateDisplayMode(Bundle extras) {
-        if(null == extras){
-            mode = MODE_NEW_ACCT;
-        }
-        else {
-            mode = extras.getString(SIGNUP_MODE);
-        }
-
-        if (mode.equals(MODE_NEW_ACCT)) {
-            clearControls();
-        } else {
+    private void updateDisplayMode() {
+        if (LoginUser.isLogin()) {
             loadSignUpData();
+        } else {
+            clearControls();
         }
     }
 
@@ -145,7 +133,7 @@ public class SignUpActivity extends Activity {
     }
 
     private void setSignUpButtonAction() {
-        _signupButton = (Button) findViewById(R.id.signupbutton);
+        Button _signupButton = (Button) findViewById(R.id.signupbutton);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,7 +235,7 @@ public class SignUpActivity extends Activity {
 
         // Save a file: path for use with ACTION_VIEW intents
         _imagePath = "file:" + image.getAbsolutePath();
-//        _imagePath = image.getAbsolutePath();
+        _imagePath = image.getAbsolutePath();
         return image;
     }
 
