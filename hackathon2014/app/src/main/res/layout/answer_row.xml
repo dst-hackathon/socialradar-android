@@ -2,7 +2,8 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="130dp">
+    android:layout_height="130dp"
+    android:minHeight="70dp">
 
     <CheckBox
         android:id="@+id/answerCheckButton"
@@ -14,8 +15,7 @@
         android:layout_alignParentStart="true"
         android:button="@drawable/answer_checkbox_design"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        />
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:id="@+id/answerText"
@@ -38,5 +38,4 @@
         android:layout_alignParentEnd="true"
         android:contentDescription=""
         />
-
 </RelativeLayout>
