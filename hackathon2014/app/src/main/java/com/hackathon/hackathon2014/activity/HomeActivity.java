@@ -6,15 +6,20 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.utility.ExitDialog;
 
 
 public class HomeActivity extends Activity implements ProfileFragment.ControlInterface {
 
 	FragmentManager fm = getFragmentManager();
     FragmentTransaction ft = fm.beginTransaction();
+    ExitDialog extDialog;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +66,29 @@ public class HomeActivity extends Activity implements ProfileFragment.ControlInt
 		}
 
 	}
-/*    @Override
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        if (extDialog != null && extDialog.isShow() == true ) {
+            extDialog.dismiss();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            openExitDialog( "Do you wish to log out." ,"logout" );
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -74,9 +97,18 @@ public class HomeActivity extends Activity implements ProfileFragment.ControlInt
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.logout) {
+            openExitDialog( "Do you wish to log out." ,"logout" );
+            return true;
+        } else if ( id == R.id.exit ) {
+            openExitDialog( "Do you wish to exit the program.", "exit" );
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }*/
+    }
+
+    public void openExitDialog( String message, String type ) {
+        extDialog = new ExitDialog(this, getApplicationContext(), message, type);
+        extDialog.open();
+    }
 }
