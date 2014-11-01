@@ -80,11 +80,7 @@ public class OptionListAdapter extends BaseAdapter {
         });
 
         ImageView imageView = (ImageView) view.findViewById(R.id.nextButton);
-        if (CollectionUtils.isEmpty(option.getOptions())) {
-            imageView.setVisibility(View.INVISIBLE);
-        } else {
-            imageView.setVisibility(View.VISIBLE);
-        }
+        imageView.setVisibility(View.INVISIBLE);
 
         return view;
     }

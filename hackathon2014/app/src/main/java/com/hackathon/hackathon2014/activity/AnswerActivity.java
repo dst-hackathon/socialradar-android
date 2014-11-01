@@ -12,9 +12,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.hackathon.hackathon2014.AnswerHolder;
 import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.adapter.CategoryListAdapter;
 import com.hackathon.hackathon2014.adapter.OptionListAdapter;
+import com.hackathon.hackathon2014.model.Category;
 import com.hackathon.hackathon2014.model.Option;
 import com.hackathon.hackathon2014.model.Question;
 
@@ -32,7 +33,7 @@ public class AnswerActivity extends Activity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.answerContainer, new AnswerListFragment())
+                    .add(R.id.answerContainer, new CategoryListFragment())
                     .commit();
         }
     }
@@ -56,9 +57,9 @@ public class AnswerActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static class AnswerListFragment extends Fragment
+    public static class CategoryListFragment extends Fragment
     {
-        public AnswerListFragment() {
+        public CategoryListFragment() {
         }
 
         @Override
@@ -66,68 +67,53 @@ public class AnswerActivity extends Activity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_answer, container, false);
 
-            List<Option> options = getAnswers();
+            Question question = getQuestion();
 
-            for (Option option : options) {
-                if (AnswerHolder.contains(option)) {
-                    int index = AnswerHolder.indexOf(option);
-                    option.setChecked(AnswerHolder.get(index).isChecked());
-                }
-            }
-
-            OptionListAdapter optionListAdapter = new OptionListAdapter(this.getActivity(), options);
+            CategoryListAdapter optionListAdapter = new CategoryListAdapter(this.getActivity(), question.getCategories());
 
             ListView listView = (ListView) rootView.findViewById(R.id.answerListView);
             listView.setAdapter(optionListAdapter);
 
-            listView.setOnItemClickListener(new OpenNestedAnswerEvent(options));
+            listView.setOnItemClickListener(new OpenNestedAnswerEvent(question.getCategories()));
 
             return rootView;
         }
 
-        private List<Option> getAnswers() {
-            List<Option> options;
-            if(getArguments()!=null){
-                Option selectedOption = (Option) getArguments().getSerializable("answer");
-                options = selectedOption.getOptions();
-            }else{
-                Question question = (Question) getActivity().getIntent().getSerializableExtra("question");
-                options = question.getOptions();
-            }
-            return options;
+        private Question getQuestion() {
+            return (Question) getActivity().getIntent().getSerializableExtra("question");
         }
 
         private class OpenNestedAnswerEvent implements android.widget.AdapterView.OnItemClickListener {
 
-            private List<Option> options;
+            private List<Category> categories;
 
-            private OpenNestedAnswerEvent(List<Option> options) {
-                this.options = options;
+            private OpenNestedAnswerEvent(List<Category> categories) {
+                this.categories = categories;
             }
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Option option = options.get(i);
+                Category category = categories.get(i);
 
-                if( !CollectionUtils.isEmpty(option.getOptions()) ){
-                    displayFragment(option);
+                if( !CollectionUtils.isEmpty(category.getOptions()) ){
+                    displayOption(category);
                 }
             }
 
         }
 
-        private void displayFragment(Option option) {
-            final AnswerListFragment fragment = new AnswerListFragment();
-
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("answer", option);
-
-            fragment.setArguments(bundle);
-
-            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.answerContainer, fragment, "AnswerFragment");
-            transaction.addToBackStack(null);
-            transaction.commit();
+        private void displayOption(Category category) {
+//            final CategoryListFragment fragment = new CategoryListFragment();
+//
+//            Bundle bundle = new Bundle();
+//            bundle.putSerializable("answer", option);
+//
+//            fragment.setArguments(bundle);
+//
+//            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//            transaction.replace(R.id.answerContainer, fragment, "AnswerFragment");
+//            transaction.addToBackStack(null);
+//            transaction.commit();
         }
     }
 }

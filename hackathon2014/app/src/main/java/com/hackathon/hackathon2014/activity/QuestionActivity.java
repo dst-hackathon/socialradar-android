@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.model.Category;
 import com.hackathon.hackathon2014.utility.RestProvider;
 import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
 import com.hackathon.hackathon2014.model.Option;
@@ -111,26 +112,26 @@ public class QuestionActivity extends Activity {
                 //MOCK
                 questions.add(
                      new Question("อาหาร" + "ที่คุณชอบ"
-                         ,new Option("ญี่ปุ่น","เทปันยากิ","ซูชิ")
-                         ,new Option("จีน","พระกระโดดกำแพง","หูฉลามน้ำแดง","ติ่มซำ","กระเพาะปลาผัดแห้ง","กระเพาะปลาน้ำแดง","ขาหมูหมั่นโถว")
-                         ,new Option("ไทย","กระเพราไข่ดาว", "แกงป้า")
-                         ,new Option("อินเดีย")
-                         ,new Option("เกาหลี")
-                         ,new Option("อิตาเลี่ยน" ,"พิซซ่า","สปาเกตตี้")
+                         ,new Category("ญี่ปุ่น","เทปันยากิ","ซูชิ")
+                         ,new Category("จีน","พระกระโดดกำแพง","หูฉลามน้ำแดง","ติ่มซำ","กระเพาะปลาผัดแห้ง","กระเพาะปลาน้ำแดง","ขาหมูหมั่นโถว")
+                         ,new Category("ไทย","กระเพราไข่ดาว", "แกงป้า")
+                         ,new Category("อินเดีย")
+                         ,new Category("เกาหลี")
+                         ,new Category("อิตาเลี่ยน" ,"พิซซ่า","สปาเกตตี้")
                      )
                 );
                 questions.add(new Question("สี" + "ที่คุณชอบ"));
                 questions.add(new Question("สัตว์" + "ที่คุณชอบ"));
                 questions.add(new Question("Mobile" + "ที่คุณชอบ"));
                 questions.add(new Question("เพศ" + "ที่คุณชอบ"
-                     ,new Option("ชาย")
-                     ,new Option("หญิง")
+                     ,new Category("ชาย")
+                     ,new Category("หญิง")
                      )
                 );
                 questions.add(new Question("ประเภทหนัง" + "ที่คุณชอบ"
-                        ,new Option("action","เลือดสาด")
-                        ,new Option("ตลก")
-                        ,new Option("อินดี้")
+                        ,new Category("action","เลือดสาด")
+                        ,new Category("ตลก")
+                        ,new Category("อินดี้")
                 ));
                 questions.add(new Question("กีฬา" + "ที่คุณชอบ"));
                 questions.add(new Question("เพลง" + "ที่คุณชอบ"));
@@ -174,7 +175,7 @@ public class QuestionActivity extends Activity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Question question = questions.get(i);
 
-                if(!question.hasAnswer()){
+                if(!question.hasCategories()){
                     return;
                 }
 
