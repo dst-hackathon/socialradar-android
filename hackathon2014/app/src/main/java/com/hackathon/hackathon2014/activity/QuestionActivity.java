@@ -19,7 +19,6 @@ import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.Category;
 import com.hackathon.hackathon2014.utility.RestProvider;
 import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
-import com.hackathon.hackathon2014.model.Option;
 import com.hackathon.hackathon2014.model.Question;
 
 import org.springframework.web.client.RestTemplate;
@@ -179,7 +178,7 @@ public class QuestionActivity extends Activity {
                     return;
                 }
 
-                Intent intent = new Intent(activity,AnswerActivity.class);
+                Intent intent = new Intent(activity,CategoryActivity.class);
                 intent.putExtra("question",question);
                 activity.startActivity(intent);
             }

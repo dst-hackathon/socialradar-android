@@ -3,5 +3,5 @@
     android:id="@+id/answerContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hackathon.hackathon2014.activity.AnswerActivity"
+    tools:context="com.hackathon.hackathon2014.activity.CategoryActivity"
     tools:ignore="MergeRootFrame" />
