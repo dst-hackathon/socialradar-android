@@ -16,11 +16,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.utility.RestProvider;
 import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
 import com.hackathon.hackathon2014.model.Option;
 import com.hackathon.hackathon2014.model.Question;
 
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -101,9 +101,7 @@ public class QuestionActivity extends Activity {
                 List<Question> questions = new ArrayList<Question>();
 
                 try {
-                    RestTemplate restTemplate = new RestTemplate();
-                    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-
+                    RestTemplate restTemplate = RestProvider.getInstance();
                     questions.addAll(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
                 } catch (Exception e) {
                     String error = "Fail !!!!!!" + e.getMessage();
