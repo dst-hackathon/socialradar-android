@@ -14,13 +14,12 @@ import android.widget.ListView;
 
 import com.hackathon.hackathon2014.AnswerHolder;
 import com.hackathon.hackathon2014.R;
-import com.hackathon.hackathon2014.adapter.AnswerListAdapter;
-import com.hackathon.hackathon2014.model.Answer;
+import com.hackathon.hackathon2014.adapter.OptionListAdapter;
+import com.hackathon.hackathon2014.model.Option;
 import com.hackathon.hackathon2014.model.Question;
 
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
 import java.util.List;
 
 
@@ -67,61 +66,61 @@ public class AnswerActivity extends Activity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_answer, container, false);
 
-            List<Answer> answers = getAnswers();
+            List<Option> options = getAnswers();
 
-            for (Answer answer : answers) {
-                if (AnswerHolder.contains(answer)) {
-                    int index = AnswerHolder.indexOf(answer);
-                    answer.setChecked(AnswerHolder.get(index).isChecked());
+            for (Option option : options) {
+                if (AnswerHolder.contains(option)) {
+                    int index = AnswerHolder.indexOf(option);
+                    option.setChecked(AnswerHolder.get(index).isChecked());
                 }
             }
 
-            AnswerListAdapter answerListAdapter = new AnswerListAdapter(this.getActivity(),answers);
+            OptionListAdapter optionListAdapter = new OptionListAdapter(this.getActivity(), options);
 
             ListView listView = (ListView) rootView.findViewById(R.id.answerListView);
-            listView.setAdapter(answerListAdapter);
+            listView.setAdapter(optionListAdapter);
 
-            listView.setOnItemClickListener(new OpenNestedAnswerEvent(answers));
+            listView.setOnItemClickListener(new OpenNestedAnswerEvent(options));
 
             return rootView;
         }
 
-        private List<Answer> getAnswers() {
-            List<Answer> answers;
+        private List<Option> getAnswers() {
+            List<Option> options;
             if(getArguments()!=null){
-                Answer selectedAnswer = (Answer) getArguments().getSerializable("answer");
-                answers = selectedAnswer.getAnswers();
+                Option selectedOption = (Option) getArguments().getSerializable("answer");
+                options = selectedOption.getOptions();
             }else{
                 Question question = (Question) getActivity().getIntent().getSerializableExtra("question");
-                answers = question.getAnswers();
+                options = question.getOptions();
             }
-            return answers;
+            return options;
         }
 
         private class OpenNestedAnswerEvent implements android.widget.AdapterView.OnItemClickListener {
 
-            private List<Answer> answers;
+            private List<Option> options;
 
-            private OpenNestedAnswerEvent(List<Answer> answers) {
-                this.answers = answers;
+            private OpenNestedAnswerEvent(List<Option> options) {
+                this.options = options;
             }
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Answer answer = answers.get(i);
+                Option option = options.get(i);
 
-                if( !CollectionUtils.isEmpty(answer.getAnswers()) ){
-                    displayFragment(answer);
+                if( !CollectionUtils.isEmpty(option.getOptions()) ){
+                    displayFragment(option);
                 }
             }
 
         }
 
-        private void displayFragment(Answer answer) {
+        private void displayFragment(Option option) {
             final AnswerListFragment fragment = new AnswerListFragment();
 
             Bundle bundle = new Bundle();
-            bundle.putSerializable("answer",answer);
+            bundle.putSerializable("answer", option);
 
             fragment.setArguments(bundle);
 
