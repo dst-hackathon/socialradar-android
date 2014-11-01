@@ -5,6 +5,7 @@ package com.hackathon.hackathon2014.model;
  */
 public class RegisterInfo {
     private String displayName;
+    private int id;
     private String username;
     private String password;
     private String email;
@@ -16,6 +17,14 @@ public class RegisterInfo {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUsername() {

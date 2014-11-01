@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.hackathon.hackathon2014.LoginUser;
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.RegisterInfo;
+import com.hackathon.hackathon2014.utility.ImageDownloader;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -60,9 +61,9 @@ public class SignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        updateDisplayMode();
         setImageIconAction();
         setSignUpButtonAction();
+        updateDisplayMode();
     }
 
     private void updateDisplayMode() {
@@ -185,7 +186,7 @@ public class SignUpActivity extends Activity {
     private void loadSignUpData() {
         //get userid
         //get register information from user id
-        //get avatar image
+        new ImageDownloader( _imageView ).execute( "http://api.radar.codedeck.com/users/" + 2 +  "/avatar" );
     }
 
     /////////////////////////////////
