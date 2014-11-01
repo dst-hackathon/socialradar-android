@@ -24,5 +24,6 @@
     <string name="intro_signup_msg">Do not have an account?</string>
     <string name="facebook_desc">Login with Facebook user</string>
     <string name="forget_password_msg">Forget your password?</string>
-    
+    <string name="loading_str">loading ... please wait a moment</string>
+
 </resources>

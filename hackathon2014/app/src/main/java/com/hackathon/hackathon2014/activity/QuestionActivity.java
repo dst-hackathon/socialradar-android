@@ -3,9 +3,7 @@ package com.hackathon.hackathon2014.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,18 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
-import com.hackathon.hackathon2014.model.Category;
-import com.hackathon.hackathon2014.utility.RestProvider;
+import com.hackathon.hackathon2014.utility.PostRequestHandler;
+import com.hackathon.hackathon2014.webservice.RestProvider;
 import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
 import com.hackathon.hackathon2014.model.Question;
 
-import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -74,92 +67,20 @@ public class QuestionActivity extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_question, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_question, container, false);
 
-            new QuestionRequestTask(getActivity(),rootView).execute();
+            RestProvider.getQuestions(new PostRequestHandler<List<Question>>() {
+                @Override
+                public void handle(List<Question> questions) {
+                    QuestionListAdapter questionListAdapter = new QuestionListAdapter(getActivity(), questions);
 
-            return rootView;
-        }
+                    ListView listView = (ListView) rootView.findViewById(R.id.questionListView);
+                    listView.setAdapter(questionListAdapter);
 
-        private class QuestionRequestTask extends AsyncTask<Void,Void,List<Question>> {
-            private final String url = "http://api.radar.codedeck.com/questions";
-
-            private Activity activity;
-            private View view;
-
-            public QuestionRequestTask(Activity activity, View view) {
-                this.activity = activity;
-                this.view = view;
-            }
-
-            @Override
-            protected void onPreExecute() {
-                Toast.makeText(getActivity().getBaseContext(),"Loading...", Toast.LENGTH_SHORT ).show();
-
-            }
-
-            @Override
-            protected List<Question> doInBackground(Void... voids) {
-                List<Question> questions = new ArrayList<Question>();
-
-                try {
-                    RestTemplate restTemplate = RestProvider.getInstance();
-                    questions.addAll(Arrays.asList(restTemplate.getForObject(url, Question[].class)));
-                } catch (Exception e) {
-                    String error = "Fail !!!!!!" + e.getMessage();
-                    Log.e(this.getClass().getName(), error);
+                    listView.setOnItemClickListener(new OpenAnswerEvent(getActivity(), questions));
                 }
-
-                //MOCK
-                questions.add(
-                     new Question("อาหาร" + "ที่คุณชอบ"
-                         ,new Category("ญี่ปุ่น","เทปันยากิ","ซูชิ")
-                         ,new Category("จีน","พระกระโดดกำแพง","หูฉลามน้ำแดง","ติ่มซำ","กระเพาะปลาผัดแห้ง","กระเพาะปลาน้ำแดง","ขาหมูหมั่นโถว")
-                         ,new Category("ไทย","กระเพราไข่ดาว", "แกงป้า")
-                         ,new Category("อินเดีย")
-                         ,new Category("เกาหลี")
-                         ,new Category("อิตาเลี่ยน" ,"พิซซ่า","สปาเกตตี้")
-                     )
-                );
-                questions.add(new Question("สี" + "ที่คุณชอบ"));
-                questions.add(new Question("สัตว์" + "ที่คุณชอบ"));
-                questions.add(new Question("Mobile" + "ที่คุณชอบ"));
-                questions.add(new Question("เพศ" + "ที่คุณชอบ"
-                     ,new Category("ชาย")
-                     ,new Category("หญิง")
-                     )
-                );
-                questions.add(new Question("ประเภทหนัง" + "ที่คุณชอบ"
-                        ,new Category("action","เลือดสาด")
-                        ,new Category("ตลก")
-                        ,new Category("อินดี้")
-                ));
-                questions.add(new Question("กีฬา" + "ที่คุณชอบ"));
-                questions.add(new Question("เพลง" + "ที่คุณชอบ"));
-                questions.add(new Question("เครื่องดื่ม" + "ที่คุณชอบ"));
-                questions.add(new Question("Notebook" + "ที่คุณชอบ"));
-                questions.add(new Question("ขนม" + "ที่คุณชอบ"));
-                questions.add(new Question("ศิลปิน" + "ที่คุณชอบ"));
-                questions.add(new Question("หนังสือ" + "ที่คุณชอบ"));
-                questions.add(new Question("วิชาเรียน" + "ที่คุณชอบ"));
-                questions.add(new Question("Brand เสื้อผ้า" + "ที่คุณชอบ"));
-                questions.add(new Question("งานอดิเรก"));
-                questions.add(new Question("สถานที่เที่ยว" + "ที่คุณชอบ"));
-
-                Log.e(this.getClass().getName(), questions.toString());
-
-                return questions;
-            }
-
-            @Override
-            protected void onPostExecute(List<Question> questions) {
-                QuestionListAdapter questionListAdapter = new QuestionListAdapter(activity, questions);
-
-                ListView listView = (ListView) view.findViewById(R.id.questionListView);
-                listView.setAdapter(questionListAdapter);
-
-                listView.setOnItemClickListener(new OpenAnswerEvent(activity, questions));
-            }
+            });
+            return rootView;
         }
 
         private class OpenAnswerEvent implements android.widget.AdapterView.OnItemClickListener {

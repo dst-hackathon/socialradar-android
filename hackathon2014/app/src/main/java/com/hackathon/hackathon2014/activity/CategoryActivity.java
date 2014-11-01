@@ -148,25 +148,28 @@ public class CategoryActivity extends Activity {
     public void onBackPressed() {
         Fragment fragment = getFragmentManager().findFragmentByTag(FRAGMENT_ANSWERS);
 
-//        Log.e(this.getClass().getName(), fragment.toString());
         if(fragment instanceof CategoryListFragment){
-            Log.e(this.getClass().getName(), fragment.toString());
         }
 
         if(fragment instanceof OptionListFragment){
-            Log.e(this.getClass().getName(), fragment.toString());
-
-
             Category category = ((OptionListFragment) fragment).getCategory();
-            category.setOptionChecked(false);
-            for(Option option : category.getOptions())
-            {
-                if( option.isChecked() ){
-                    category.setOptionChecked(true);
-                }
-            }
+            category.setOptionChecked(atLeastOneOptionChecked(category.getOptions()));
+
         }
 
         super.onBackPressed();
+    }
+
+    private boolean atLeastOneOptionChecked(List<Option> options)
+    {
+
+        for(Option option : options)
+        {
+            if( option.isChecked() ){
+                return true;
+            }
+        }
+
+        return false;
     }
 }

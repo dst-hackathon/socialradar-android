@@ -21,15 +21,16 @@ public class LoginUser {
         return loginUser!=null;
     }
 
-    public void logout(){
+    public static void logout(){
         loginUser = null;
     }
 
-    public void login(String username,String password){
+    public static boolean login(String username,String password){
         loginUser = new RegisterInfo();
         loginUser.setUsername(username);
         loginUser.setPassword(password);
 
         //TODO
+        return true;
     }
 }
