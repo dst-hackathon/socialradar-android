@@ -21,18 +21,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
-import com.hackathon.hackathon2014.model.Question;
 import com.hackathon.hackathon2014.model.RegisterInfo;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,19 +42,15 @@ import java.util.List;
 public class SignUpActivity extends Activity {
     private final int RESULT_LOAD_IMAGE = 1;
     private final int RESULT_OPEN_CAMERA = 2;
+
     private final String BASE_SERVICE_URL = "http://api.radar.codedesk.com";
     private final String LOGIN_SERVICE_URL = "";
     private final String POST_AVATAR_SERVICE_URL = "/users/{id}/avatar";
     private final String GET_AVATAR_SERVICE_URL = "/users{id}/avatar";
 
-    public final String USERNAME = "SIGNUP_USERNAME";
-    private final String PASSWORD = "SIGNUP_PASSWORD";
-
-    public final String DISPLAY_NAME = "SIGNUP_DISPLAY_NAME";
-    public final String SIGNUP_MODE = "SIGNUP_MODE";
-    public final String MODE_NEW_ACCT = "MODE_NEW_ACCT";
-
-    public final String MODE_EDIT_ACCT = "MODE_EDIT_ACCT";
+    public static final String SIGNUP_MODE = "SIGNUP_MODE";
+    public static final String MODE_NEW_ACCT = "MODE_NEW_ACCT";
+    public static final String MODE_EDIT_ACCT = "MODE_EDIT_ACCT";
 
     private ImageView _imageView;
     private Button _signupButton;
@@ -66,24 +63,24 @@ public class SignUpActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        Bundle extras = getIntent().getExtras();
+        updateDisplayMode(getIntent().getExtras());
+        setImageIconAction();
+        setSignUpButtonAction();
+    }
 
-        if (null != extras && null != extras.getString(SIGNUP_MODE)) {
-            mode = extras.getString(SIGNUP_MODE);
-        }
-        else {
+    private void updateDisplayMode(Bundle extras) {
+        if(null == extras){
             mode = MODE_NEW_ACCT;
         }
-
-        if(mode.equals(MODE_NEW_ACCT)) {
-            clearControls();
-        }
         else {
+            mode = extras.getString(SIGNUP_MODE);
+        }
+
+        if (mode.equals(MODE_NEW_ACCT)) {
+            clearControls();
+        } else {
             loadSignUpData();
         }
-
-        setImageIconAction();
-        setSignUpButton();
     }
 
     @Override
@@ -108,11 +105,8 @@ public class SignUpActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageIcon);
-
-        if (resultCode == RESULT_OK && null != data) {
-
-            if (requestCode == RESULT_LOAD_IMAGE) {
+        if (resultCode == RESULT_OK) {
+            if ((requestCode == RESULT_LOAD_IMAGE) && (null != data)) {
                 Uri selectedImage = data.getData();
                 String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
@@ -121,17 +115,22 @@ public class SignUpActivity extends Activity {
                 cursor.moveToFirst();
 
                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                String picturePath = cursor.getString(columnIndex);
+                _imagePath = cursor.getString(columnIndex);
                 cursor.close();
-                imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                setImageIcon(_imagePath);
 
             } else if (requestCode == RESULT_OPEN_CAMERA) {
                 galleryAddPic();
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                imageView.setImageBitmap(bitmap);
+                setImageIcon(_imagePath);
             }
         }
+    }
 
+    ////////////////////////////////
+
+    private void setImageIcon(String imagePath){
+        ImageView imageView = (ImageView) findViewById(R.id.imageIcon);
+        imageView.setImageBitmap(BitmapFactory.decodeFile(imagePath));
     }
 
     private void setImageIconAction() {
@@ -145,7 +144,7 @@ public class SignUpActivity extends Activity {
         });
     }
 
-    private void setSignUpButton() {
+    private void setSignUpButtonAction() {
         _signupButton = (Button) findViewById(R.id.signupbutton);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +168,8 @@ public class SignUpActivity extends Activity {
         });
     }
 
+    ////////////////////////////////
+
     private void registerNewAccount(EditText name, EditText username, EditText password, EditText email) {
         RegisterInfo registerInfo = setupRegisterInfo(name, username, password, email);
         submitRequest(registerInfo);
@@ -182,41 +183,18 @@ public class SignUpActivity extends Activity {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setAccept(mediaTypes);
-        HttpEntity<String> httpEntity = new HttpEntity<String>(null,httpHeaders);
+        HttpEntity<String> httpEntity = new HttpEntity<String>(null, httpHeaders);
 
         RegisterInfo res = restTemplate.postForObject(LOGIN_SERVICE_URL, registerInfo, RegisterInfo.class, httpEntity);
     }
 
-    private RegisterInfo setupRegisterInfo(EditText name, EditText username, EditText password, EditText email) {
-        RegisterInfo registerInfo = new RegisterInfo();
-        registerInfo.setDisplayName(getEditTextValue(name));
-        registerInfo.setUsername(getEditTextValue(username));
-        registerInfo.setPassword(getEditTextValue(password));
-        registerInfo.setEmail(getEditTextValue(email));
-
-        Bitmap bitmap = Bitmap.createBitmap(_imageView.getDrawingCache());
-        ByteArrayOutputStream stream=new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-        registerInfo.setImage(stream.toByteArray());
-        return registerInfo;
+    private void loadSignUpData() {
+        //get userid
+        //get register information from user id
+        //get avatar image
     }
 
-    private void displayToast(String message) {
-        Toast.makeText(this, message,
-                Toast.LENGTH_LONG).show();
-    }
-
-    private boolean isNotMatch(EditText password, EditText cPassword) {
-        return !getEditTextValue(password).equals(getEditTextValue(cPassword));
-    }
-
-    private String getEditTextValue(EditText editText) {
-        return editText.getText().toString();
-    }
-
-    private boolean hasEmptyValue(EditText name) {
-        return (null == name) || (null == name.getText()) || "".equals(getEditTextValue(name));
-    }
+    /////////////////////////////////
 
     private void buildImageOptionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -232,21 +210,53 @@ public class SignUpActivity extends Activity {
 
                             startActivityForResult(intent, RESULT_LOAD_IMAGE);
                         } else if (i == 1) {
-                            _imagePath = Environment.getExternalStorageDirectory()
-                                    + "/images/socialRadar/"
-                                    + String.valueOf(System.currentTimeMillis())
-                                    + "uploadImage"
-                                    + ".jpg";
-
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, _imagePath);
 
-                            startActivityForResult(intent, RESULT_OPEN_CAMERA);
+                            if (intent.resolveActivity(getPackageManager()) != null) {
+                                File photoFile = null;
+                                try {
+                                    photoFile = createImageFile();
+                                } catch (IOException ex) {
+                                    ex.printStackTrace();
+                                }
+                                // Continue only if the File was successfully created
+                                if (photoFile != null) {
+                                    intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                            Uri.fromFile(photoFile));
+                                    startActivityForResult(intent, RESULT_OPEN_CAMERA);
+                                }
+                            }
                         }
                     }
                 });
         builder.create();
         builder.show();
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        _imagePath = "file:" + image.getAbsolutePath();
+//        _imagePath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(_imagePath);
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
     }
 
     private void clearControls() {
@@ -263,16 +273,34 @@ public class SignUpActivity extends Activity {
         _email.setText("");
     }
 
-    private void loadSignUpData() {
-
+    private boolean isNotMatch(EditText password, EditText cPassword) {
+        return !getEditTextValue(password).equals(getEditTextValue(cPassword));
     }
 
-    //not working yet
-    private void galleryAddPic() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        File f = new File(_imagePath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
-        this.sendBroadcast(mediaScanIntent);
+    private boolean hasEmptyValue(EditText name) {
+        return (null == name) || (null == name.getText()) || "".equals(getEditTextValue(name));
+    }
+
+    private String getEditTextValue(EditText editText) {
+        return editText.getText().toString();
+    }
+
+    private void displayToast(String message) {
+        Toast.makeText(this, message,
+                Toast.LENGTH_LONG).show();
+    }
+
+    private RegisterInfo setupRegisterInfo(EditText name, EditText username, EditText password, EditText email) {
+        RegisterInfo registerInfo = new RegisterInfo();
+        registerInfo.setDisplayName(getEditTextValue(name));
+        registerInfo.setUsername(getEditTextValue(username));
+        registerInfo.setPassword(getEditTextValue(password));
+        registerInfo.setEmail(getEditTextValue(email));
+
+        Bitmap bitmap = Bitmap.createBitmap(_imageView.getDrawingCache());
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+        registerInfo.setImage(stream.toByteArray());
+        return registerInfo;
     }
 }
