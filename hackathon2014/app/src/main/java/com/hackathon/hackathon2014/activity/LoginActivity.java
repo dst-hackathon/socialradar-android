@@ -88,8 +88,8 @@ public class LoginActivity extends Activity {
 	}
 
 	public void goToHomePage() {
-//		Intent intent = new Intent(this, HomeActivity.class);
-//		startActivity(intent);
+		Intent intent = new Intent(this, HomeActivity.class);
+		startActivity(intent);
 	}
 
 	public boolean validateLogin(String user, String password) {
