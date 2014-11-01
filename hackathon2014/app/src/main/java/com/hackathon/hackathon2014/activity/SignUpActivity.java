@@ -21,10 +21,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
+import com.hackathon.hackathon2014.model.Question;
 import com.hackathon.hackathon2014.model.RegisterInfo;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by smileyOpal on 10/31/14.
@@ -151,16 +160,28 @@ public class SignUpActivity extends Activity {
                 } else if (isNotMatch(_password, _cPassword)) {
                     displayToast("Password mismatch!");
                 } else {
-                    submitSignUpData(_name, _username, _password, _email);
+                    registerNewAccount(_name, _username, _password, _email);
                 }
             }
         });
     }
 
-    private void submitSignUpData(EditText name, EditText username, EditText password, EditText email) {
-        setupRegisterInfo(name, username, password, email);
+    private void registerNewAccount(EditText name, EditText username, EditText password, EditText email) {
+        RegisterInfo registerInfo = setupRegisterInfo(name, username, password, email);
+        submitRequest(registerInfo);
+    }
 
-        // post request
+    private void submitRequest(RegisterInfo registerInfo) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        List<MediaType> mediaTypes = new ArrayList<MediaType>();
+        mediaTypes.add(MediaType.APPLICATION_JSON);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setAccept(mediaTypes);
+        HttpEntity<String> httpEntity = new HttpEntity<String>(null,httpHeaders);
+
+        RegisterInfo res = restTemplate.postForObject(LOGIN_SERVICE_URL, registerInfo, RegisterInfo.class, httpEntity);
     }
 
     private RegisterInfo setupRegisterInfo(EditText name, EditText username, EditText password, EditText email) {
