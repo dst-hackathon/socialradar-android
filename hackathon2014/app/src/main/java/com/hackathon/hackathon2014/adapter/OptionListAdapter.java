@@ -73,8 +73,6 @@ public class OptionListAdapter extends BaseAdapter {
                 Log.e("com.hackathon.hackathon2014", "change from  " + option.isChecked() + " to " + b);
 
                 option.setChecked(b);
-                AnswerHolder.add(option);
-
                 Log.e("com.hackathon.hackathon2014", "All  " + AnswerHolder.getAll());
             }
         });

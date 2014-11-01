@@ -61,7 +61,8 @@ public class CategoryListAdapter extends BaseAdapter {
 
         CheckBox checkBox = (CheckBox)view.findViewById(R.id.answerCheckButton);
         checkBox.setClickable(false);
-        
+        checkBox.setChecked(category.isOptionChecked());
+
         return view;
     }
 }
