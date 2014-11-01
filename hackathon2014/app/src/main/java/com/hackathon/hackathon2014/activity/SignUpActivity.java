@@ -235,7 +235,7 @@ public class SignUpActivity extends Activity {
 
         // Save a file: path for use with ACTION_VIEW intents
         _imagePath = "file:" + image.getAbsolutePath();
-        _imagePath = image.getAbsolutePath();
+//        _imagePath = image.getAbsolutePath();
         return image;
     }
 
