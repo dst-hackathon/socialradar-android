@@ -24,7 +24,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 
-public class AnswerActivity extends Activity {
+public class CategoryActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,4 +116,5 @@ public class AnswerActivity extends Activity {
 //            transaction.commit();
         }
     }
+
 }
