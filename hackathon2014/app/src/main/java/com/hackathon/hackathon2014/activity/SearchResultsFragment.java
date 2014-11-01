@@ -1,5 +1,6 @@
 package com.hackathon.hackathon2014.activity;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,10 +20,13 @@ import java.util.List;
 
 public class SearchResultsFragment extends Fragment {
 	View view;
+    Activity activity;
+
     @Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
     	view = inflater.inflate(R.layout.search_results_fragment, container, false);
-        getList();
+        activity = this.getActivity();
+        //getList();
 		return view ;
 	}
     
@@ -32,8 +36,9 @@ public class SearchResultsFragment extends Fragment {
     	friendLists.add(new FriendModel("Jeed", "1"));
     	friendLists.add(new FriendModel("Ja", "2"));
     	friendLists.add(new FriendModel("Jaja", "3"));
+        friendLists.add(new FriendModel("Jap", "4"));
     	
-    	FriendAdapter adapter = new FriendAdapter(this.getActivity(), friendLists);
+    	FriendAdapter adapter = new FriendAdapter(activity, friendLists);
 //		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
 //                android.R.layout.simple_list_item_1, AndroidOS);
 
