@@ -144,7 +144,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Submit"
-            android:id="@+id/signupbutton" />
+            android:id="@+id/signupbutton"
+            style="@style/ButtonOrangeTheme" />
     </LinearLayout>
 
 </LinearLayout>

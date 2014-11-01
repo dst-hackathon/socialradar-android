@@ -17,7 +17,7 @@ public class Question implements Serializable{
 
     private String text;
 
-    private List<Option> options;
+    private List<Category> categories;
 
     public Question() {
     }
@@ -26,9 +26,9 @@ public class Question implements Serializable{
         this.text = text;
     }
 
-    public Question(String text, Option... options) {
+    public Question(String text, Category... categories) {
         this.text = text;
-        this.options = Arrays.asList(options);
+        this.categories = Arrays.asList(categories);
     }
 
     public Long getId() {
@@ -55,15 +55,15 @@ public class Question implements Serializable{
         this.text = text;
     }
 
-    public List<Option> getOptions() {
-        return options;
+    public List<Category> getCategories() {
+        return categories;
     }
 
-    public void setOptions(List<Option> options) {
-        this.options = options;
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
-    public boolean hasAnswer() {
-        return !CollectionUtils.isEmpty(options);
+    public boolean hasCategories() {
+        return !CollectionUtils.isEmpty(categories);
     }
 }
