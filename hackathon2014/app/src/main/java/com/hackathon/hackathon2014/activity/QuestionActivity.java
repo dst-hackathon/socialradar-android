@@ -13,7 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.hackathon.hackathon2014.R;
-import com.hackathon.hackathon2014.utility.PostRequestHandler;
+import com.hackathon.hackathon2014.webservice.PostRequestHandler;
 import com.hackathon.hackathon2014.webservice.RestProvider;
 import com.hackathon.hackathon2014.adapter.QuestionListAdapter;
 import com.hackathon.hackathon2014.model.Question;
@@ -96,11 +96,6 @@ public class QuestionActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Question question = questions.get(i);
-
-                if(!question.hasCategories()){
-                    return;
-                }
-
                 Intent intent = new Intent(activity,CategoryActivity.class);
                 intent.putExtra(EXTRA_QUESTION,question);
                 activity.startActivity(intent);

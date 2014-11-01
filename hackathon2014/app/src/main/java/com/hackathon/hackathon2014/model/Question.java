@@ -9,13 +9,15 @@ import java.util.List;
 /**
  * Created by keerati on 10/31/14 AD.
  */
-public class Question implements Serializable{
+public class Question implements Serializable {
 
     private Long id;
 
     private Long order;
 
     private String text;
+
+    private String tag;
 
     private List<Category> categories;
 
@@ -53,6 +55,14 @@ public class Question implements Serializable{
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     public List<Category> getCategories() {
