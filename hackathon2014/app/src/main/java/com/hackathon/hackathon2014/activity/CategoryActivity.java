@@ -59,9 +59,6 @@ public class CategoryActivity extends Activity {
 
     public static class CategoryListFragment extends Fragment
     {
-        public CategoryListFragment() {
-        }
-
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -69,10 +66,10 @@ public class CategoryActivity extends Activity {
 
             Question question = getQuestion();
 
-            CategoryListAdapter optionListAdapter = new CategoryListAdapter(this.getActivity(), question.getCategories());
+            CategoryListAdapter categoryListAdapter = new CategoryListAdapter(this.getActivity(), question.getCategories());
 
             ListView listView = (ListView) rootView.findViewById(R.id.answerListView);
-            listView.setAdapter(optionListAdapter);
+            listView.setAdapter(categoryListAdapter);
 
             listView.setOnItemClickListener(new OpenNestedAnswerEvent(question.getCategories()));
 
@@ -103,17 +100,47 @@ public class CategoryActivity extends Activity {
         }
 
         private void displayOption(Category category) {
-//            final CategoryListFragment fragment = new CategoryListFragment();
-//
-//            Bundle bundle = new Bundle();
-//            bundle.putSerializable("answer", option);
-//
-//            fragment.setArguments(bundle);
-//
-//            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//            transaction.replace(R.id.answerContainer, fragment, "AnswerFragment");
-//            transaction.addToBackStack(null);
-//            transaction.commit();
+
+//            getFragmentManager().beginTransaction()
+//                    .add(R.id.answerContainer, new CategoryListFragment())
+//                    .commit();
+
+            final OptionListFragment fragment = new OptionListFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("category", category);
+
+            fragment.setArguments(bundle);
+
+            final FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.answerContainer, fragment, "AnswerFragment");
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+    }
+
+    public static class OptionListFragment extends Fragment
+    {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_answer, container, false);
+
+            Category category = getCategory();
+
+            OptionListAdapter optionListAdapter = new OptionListAdapter(this.getActivity(), category.getOptions());
+
+            ListView listView = (ListView) rootView.findViewById(R.id.answerListView);
+            listView.setAdapter(optionListAdapter);
+
+            return rootView;
+        }
+
+        private Category getCategory(){
+            if( getArguments() != null ){
+                return (Category) getArguments().getSerializable("category");
+            }
+            return null;
         }
     }
 
