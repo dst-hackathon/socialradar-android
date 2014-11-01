@@ -1,8 +1,10 @@
 package com.hackathon.hackathon2014.webservice;
 
 import com.hackathon.hackathon2014.model.Category;
+import com.hackathon.hackathon2014.model.FriendModel;
 import com.hackathon.hackathon2014.model.Question;
 import com.hackathon.hackathon2014.webservice.task.CategoryRequestTask;
+import com.hackathon.hackathon2014.webservice.task.FriendListRequestTask;
 import com.hackathon.hackathon2014.webservice.task.QuestionRequestTask;
 import com.hackathon.hackathon2014.webservice.task.SubmitAnswerRequestTask;
 
@@ -39,6 +41,11 @@ public class RestProvider {
     public static void postAnswer(Question question, PostRequestHandler<Boolean> handler)
     {
         new SubmitAnswerRequestTask(getInstance(),handler).execute(question);
+    }
+
+    public static void getFriendList(String id,PostRequestHandler<List<FriendModel>> handler)
+    {
+        new FriendListRequestTask(getInstance(),handler).execute(id);
     }
 
 }

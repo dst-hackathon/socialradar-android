@@ -53,7 +53,7 @@ public class FriendAdapter extends BaseAdapter {
         ImageView userAvatar = ( ImageView ) convertView.findViewById(R.id.user_avatar);
 		FriendModel f = data.get(position);
 		
-		secondLine.setText(f.getName());
+		secondLine.setText(f.getEmail());
         new ImageDownloader( userAvatar ).execute( "http://api.radar.codedeck.com/users/" + f.getId() +  "/avatar" );
 
 		return convertView;
