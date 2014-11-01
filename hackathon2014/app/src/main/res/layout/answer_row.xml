@@ -6,8 +6,10 @@
 
     <CheckBox
         android:id="@+id/answerCheckButton"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
         android:button="@drawable/answer_checkbox_design"
@@ -28,8 +30,9 @@
     <ImageView
         android:id="@+id/nextButton"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:src="@drawable/ic_launcher"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/next"
         android:layout_centerVertical="true"
         android:cropToPadding="false"
         android:layout_alignParentEnd="true"
