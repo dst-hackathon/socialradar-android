@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.webservice.PostRequestHandler;
@@ -69,6 +70,7 @@ public class QuestionActivity extends Activity {
                 Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.fragment_question, container, false);
 
+            Toast.makeText(rootView.getContext(),"Loading...",Toast.LENGTH_LONG).show();
             RestProvider.getQuestions(new PostRequestHandler<List<Question>>() {
                 @Override
                 public void handle(List<Question> questions) {
