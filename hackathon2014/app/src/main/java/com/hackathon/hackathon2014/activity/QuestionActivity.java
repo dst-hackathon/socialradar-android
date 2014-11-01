@@ -30,6 +30,8 @@ import java.util.List;
 
 public class QuestionActivity extends Activity {
 
+    public static String EXTRA_QUESTION = "question";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,7 +181,7 @@ public class QuestionActivity extends Activity {
                 }
 
                 Intent intent = new Intent(activity,CategoryActivity.class);
-                intent.putExtra("question",question);
+                intent.putExtra(EXTRA_QUESTION,question);
                 activity.startActivity(intent);
             }
         }

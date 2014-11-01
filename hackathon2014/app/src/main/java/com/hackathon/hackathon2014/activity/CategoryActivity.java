@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,9 @@ import java.util.List;
 
 public class CategoryActivity extends Activity {
 
+    public static String BUNDLE_CATEGORY = "category";
+    public static String FRAGMENT_ANSWERS = "answerFragment";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +37,7 @@ public class CategoryActivity extends Activity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.answerContainer, new CategoryListFragment())
+                    .add(R.id.answerContainer, new CategoryListFragment(),FRAGMENT_ANSWERS)
                     .commit();
         }
     }
@@ -77,7 +81,7 @@ public class CategoryActivity extends Activity {
         }
 
         private Question getQuestion() {
-            return (Question) getActivity().getIntent().getSerializableExtra("question");
+            return (Question) getActivity().getIntent().getSerializableExtra(QuestionActivity.EXTRA_QUESTION);
         }
 
         private class OpenNestedAnswerEvent implements android.widget.AdapterView.OnItemClickListener {
@@ -101,19 +105,15 @@ public class CategoryActivity extends Activity {
 
         private void displayOption(Category category) {
 
-//            getFragmentManager().beginTransaction()
-//                    .add(R.id.answerContainer, new CategoryListFragment())
-//                    .commit();
-
             final OptionListFragment fragment = new OptionListFragment();
 
             Bundle bundle = new Bundle();
-            bundle.putSerializable("category", category);
+            bundle.putSerializable(BUNDLE_CATEGORY, category);
 
             fragment.setArguments(bundle);
 
             final FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.answerContainer, fragment, "AnswerFragment");
+            transaction.replace(R.id.answerContainer, fragment, FRAGMENT_ANSWERS);
             transaction.addToBackStack(null);
             transaction.commit();
         }
@@ -138,10 +138,35 @@ public class CategoryActivity extends Activity {
 
         private Category getCategory(){
             if( getArguments() != null ){
-                return (Category) getArguments().getSerializable("category");
+                return (Category) getArguments().getSerializable(BUNDLE_CATEGORY);
             }
             return null;
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getFragmentManager().findFragmentByTag(FRAGMENT_ANSWERS);
+
+//        Log.e(this.getClass().getName(), fragment.toString());
+        if(fragment instanceof CategoryListFragment){
+            Log.e(this.getClass().getName(), fragment.toString());
+        }
+
+        if(fragment instanceof OptionListFragment){
+            Log.e(this.getClass().getName(), fragment.toString());
+
+
+            Category category = ((OptionListFragment) fragment).getCategory();
+            category.setOptionChecked(false);
+            for(Option option : category.getOptions())
+            {
+                if( option.isChecked() ){
+                    category.setOptionChecked(true);
+                }
+            }
+        }
+
+        super.onBackPressed();
+    }
 }
