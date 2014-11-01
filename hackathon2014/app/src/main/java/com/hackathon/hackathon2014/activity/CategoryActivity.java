@@ -34,6 +34,7 @@ public class CategoryActivity extends Activity {
     public static String BUNDLE_QUESTION = "question";
 
     public static String FRAGMENT_ANSWERS = "answerFragment";
+    public static String FRAGMENT_CATEGORY = "categoryFragment";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +49,7 @@ public class CategoryActivity extends Activity {
             CategoryListFragment categoryListFragment = new CategoryListFragment();
             categoryListFragment.setArguments(bundle);
             getFragmentManager().beginTransaction()
-                    .add(R.id.answerContainer, categoryListFragment,FRAGMENT_ANSWERS)
+                    .add(R.id.answerContainer, categoryListFragment,FRAGMENT_CATEGORY)
                     .commit();
         }
     }
@@ -82,7 +83,7 @@ public class CategoryActivity extends Activity {
             final View rootView = inflater.inflate(R.layout.fragment_answer, container, false);
 
             if( question == null ){
-                question = getQuestion();
+                question = (Question)getArguments().getSerializable(BUNDLE_QUESTION);
             }
 
             if( question.getCategories() == null ){
@@ -90,6 +91,7 @@ public class CategoryActivity extends Activity {
                     @Override
                     public void handle(Question question) {
                         renderListView(rootView,question);
+                        setQuestion(question);
                     }
                 });
             }else{
@@ -108,8 +110,12 @@ public class CategoryActivity extends Activity {
             listView.setOnItemClickListener(new OpenNestedAnswerEvent(question.getCategories()));
         }
 
-        private Question getQuestion() {
-            return (Question)getArguments().getSerializable(BUNDLE_QUESTION);
+        public Question getQuestion() {
+            return question;
+        }
+
+        private void setQuestion(Question question){
+            this.question = question;
         }
 
         private class OpenNestedAnswerEvent implements android.widget.AdapterView.OnItemClickListener {
@@ -175,9 +181,6 @@ public class CategoryActivity extends Activity {
     @Override
     public void onBackPressed() {
         Fragment fragment = getFragmentManager().findFragmentByTag(FRAGMENT_ANSWERS);
-
-        if(fragment instanceof CategoryListFragment){
-        }
 
         if(fragment instanceof OptionListFragment){
             Category category = ((OptionListFragment) fragment).getCategory();
