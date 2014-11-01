@@ -56,16 +56,13 @@ public class OptionListAdapter extends BaseAdapter {
 
         final ImageView answerImage = (ImageView) view.findViewById(R.id.answerCheckButton);
 
-        if(option.isChecked()){
-            answerImage.setImageResource(R.drawable.like);
-        }else{
-            answerImage.setImageResource(R.drawable.unlike);
-        }
+        renderLike(option, answerImage);
 
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 option.toggleChecked();
+                renderLike(option, answerImage);
             }
         });
 
@@ -73,5 +70,13 @@ public class OptionListAdapter extends BaseAdapter {
         imageView.setVisibility(View.INVISIBLE);
 
         return view;
+    }
+
+    private void renderLike(Option option, ImageView answerImage) {
+        if(option.isChecked()){
+            answerImage.setImageResource(R.drawable.like);
+        }else{
+            answerImage.setImageResource(R.drawable.unlike);
+        }
     }
 }

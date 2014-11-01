@@ -170,6 +170,8 @@ public class CategoryActivity extends Activity {
             ListView listView = (ListView) rootView.findViewById(R.id.answerListView);
             listView.setAdapter(optionListAdapter);
 
+
+
             return rootView;
         }
 
