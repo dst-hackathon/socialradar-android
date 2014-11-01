@@ -41,7 +41,10 @@ import java.util.List;
 public class SignUpActivity extends Activity {
     private final int RESULT_LOAD_IMAGE = 1;
     private final int RESULT_OPEN_CAMERA = 2;
+    private final String BASE_SERVICE_URL = "http://api.radar.codedesk.com";
     private final String LOGIN_SERVICE_URL = "";
+    private final String POST_AVATAR_SERVICE_URL = "/users/{id}/avatar";
+    private final String GET_AVATAR_SERVICE_URL = "/users{id}/avatar";
 
     public final String USERNAME = "SIGNUP_USERNAME";
     private final String PASSWORD = "SIGNUP_PASSWORD";
