@@ -30,10 +30,6 @@
         <activity
             android:name=".activity.QuestionActivity"
             android:label="@string/title_activity_question">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
@@ -45,6 +41,11 @@
         <activity
             android:name=".activity.HomeActivity"
             android:label="Home" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 
