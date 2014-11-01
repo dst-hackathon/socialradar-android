@@ -42,6 +42,9 @@ public class CategoryActivity extends Activity {
         setContentView(R.layout.activity_answer);
 
         Question question = (Question)getIntent().getSerializableExtra(QuestionActivity.EXTRA_QUESTION);
+
+        setTitle(question.getText());
+
         Bundle bundle = new Bundle();
         bundle.putSerializable(BUNDLE_QUESTION,question);
 

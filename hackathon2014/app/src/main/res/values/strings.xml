@@ -12,8 +12,8 @@
         <item>Camera</item>
     </string-array>
 
-    <string name="title_activity_question">QuestionActivity</string>
-    <string name="title_activity_answer">AnswerActivity</string>
+    <string name="title_activity_question">Question</string>
+    <string name="title_activity_answer">Answer</string>
 
     <string name="login_page_name">Login</string>
     <string name="username_hint">Username</string>
