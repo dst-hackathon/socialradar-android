@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.hackathon.hackathon2014.LoginActivity" >
-
+<!--
     <ImageButton
         android:id="@+id/facebookBtn"
         android:layout_centerHorizontal="true"
@@ -17,6 +17,18 @@
         android:layout_marginTop="17dp"
         android:contentDescription="@string/facebook_desc"
         android:src="@drawable/btn_facebook_login2" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:enabled="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="or"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/facebookBtn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp" />
+    -->
 
     <LinearLayout
         android:id="@+id/linearLayout1"
@@ -102,16 +114,4 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffff"
         android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:enabled="false"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="or"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/facebookBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
-
 </RelativeLayout>
