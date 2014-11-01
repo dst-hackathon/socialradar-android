@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/actionBar</item>
-
+        <item name="android:colorBackground">#FFFF</item>
     </style>
 
     <style name="actionBar" parent="android:Widget.Holo.ActionBar.Solid">
