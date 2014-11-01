@@ -1,5 +1,7 @@
 package com.hackathon.hackathon2014.model;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +71,20 @@ public class Category implements Serializable {
 
     public void setOptionChecked(boolean optionChecked) {
         this.optionChecked = optionChecked;
+    }
+
+    public void checkOptions(List<Integer> optionIds){
+        for (Integer optionId : optionIds) {
+            checkOption(optionId);
+        }
+    }
+
+    private void checkOption(Integer id){
+        for (Option option : options) {
+            if( option.getId().longValue() == id.intValue() ){
+                option.setChecked(true);
+            }
+        }
     }
 
     @Override

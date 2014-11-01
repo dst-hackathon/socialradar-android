@@ -86,4 +86,13 @@ public class Question implements Serializable {
     public void setSelected(boolean selected) {
         this.selected = selected;
     }
+
+    public Category getCategory(Long id){
+        for (Category category : categories) {
+            if( category.getId().longValue() == id.longValue() ){
+                return category;
+            }
+        }
+        return null;
+    }
 }
