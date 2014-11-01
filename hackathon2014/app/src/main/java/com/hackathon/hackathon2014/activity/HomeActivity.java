@@ -42,10 +42,10 @@ public class HomeActivity extends Activity implements ProfileFragment.ControlInt
 			searchFriends();
 			break;
 		case R.id.edit_profile:
-			
+            startActivity(new Intent(this, SignUpActivity.class));
 			break;
 		case R.id.edit_favorite:
-			
+            startActivity(new Intent(this, QuestionActivity.class));
 			break;
 		}
 	}
