@@ -1,4 +1,4 @@
-package com.hackathon.hackathon2014.utility;
+package com.hackathon.hackathon2014.webservice;
 
 /**
  * Created by Krai on 11/1/14 AD.

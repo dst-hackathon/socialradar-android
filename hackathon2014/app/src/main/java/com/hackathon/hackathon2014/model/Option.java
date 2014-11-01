@@ -9,22 +9,15 @@ import java.util.List;
  */
 public class Option implements Serializable {
 
-    static long i = 0;
-
     private Long id;
+    private Long order;
     private String text;
     private boolean checked;
 
+    public Option() {
+    }
+
     public Option(String text) {
-        id = i++;
-        this.text = text;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
         this.text = text;
     }
 
@@ -34,6 +27,22 @@ public class Option implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getOrder() {
+        return order;
+    }
+
+    public void setOrder(Long order) {
+        this.order = order;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     @Override
