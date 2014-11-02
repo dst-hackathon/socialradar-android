@@ -83,12 +83,12 @@ public class SignUpActivity extends Activity {
 
         if (LoginUser.isLogin()) {
             screentitle.setText("Edit Account");
-            _signupButton.setText("Update Account");
+            _signupButton.setText("Update");
             mode = MODE_EDIT;
             loadSignUpData();
         } else {
             screentitle.setText("Setup New Account");
-            _signupButton.setText("Create New Account");
+            _signupButton.setText("Create");
             mode = MODE_REGISTER;
             clearControls();
         }
@@ -200,9 +200,9 @@ public class SignUpActivity extends Activity {
 
     private void loadSignUpData() {
         loginWithSignUpAccount();
+
         RegisterInfo registerInfo = LoginUser.getLoginUser();
         new ImageDownloader(_imageView).execute("http://api.radar.codedeck.com/users/" + registerInfo.getId() + "/avatar");
-        setupLoadedAccount(registerInfo);
     }
 
     private void loginWithSignUpAccount() {
@@ -218,6 +218,7 @@ public class SignUpActivity extends Activity {
                 }
             }
         });
+        setupLoadedAccount(registerInfo);
     }
 
     /////////////////////////////////
