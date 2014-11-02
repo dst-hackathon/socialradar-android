@@ -21,6 +21,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
 import org.apache.http.protocol.BasicHttpContext;
@@ -55,14 +56,14 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
             entity.addPart("password", new StringBody(registerInfo.getPassword()));
 
             if (null != registerInfo.getFile()) {
-//                entity.addPart("file", new FileBody(registerInfo.getFile()));
+                entity.addPart("file", new FileBody(registerInfo.getFile()));
 
-                Bitmap bitmap = BitmapFactory.decodeFile(registerInfo.getFile().getAbsolutePath());
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos);
-                byte[] data = bos.toByteArray();
-                ByteArrayBody bab = new ByteArrayBody(data, registerInfo.getFile().getName());
-                entity.addPart("file", bab);
+//                Bitmap bitmap = BitmapFactory.decodeFile(registerInfo.getFile().getAbsolutePath());
+//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos);
+//                byte[] data = bos.toByteArray();
+//                ByteArrayBody bab = new ByteArrayBody(data, registerInfo.getFile().getName());
+//                entity.addPart("file", bab);
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -79,20 +80,25 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
         post.addHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
         post.addHeader("Accept", "application/json");
         post.setEntity(entity);
-//        post.setEntity(createMultipartEntityBuilder(registerInfos[0]));
 
         try {
             HttpResponse response = client.execute(post, httpContext);
             String responseStr = EntityUtils.toString(response.getEntity());
-            System.out.println("******************************");
-            System.out.println("length = " + entity.getContentLength());
-            System.out.println("content type = " + entity.getContentType());
-//            System.out.println("content stream = " + entity.getContent().toString());
-            System.out.println("response status line >> " + response.getStatusLine());
-            System.out.println("response string >> " + responseStr);
-            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                return "success";
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == HttpStatus.SC_OK) {
+                JSONObject jsonObject = new JSONObject(responseStr);
+                String result = (String) jsonObject.get("success");
+                if ("".equals(result)){
+                    return "success";
+                }
+                return "fail";
             }
+            else if (statusCode == HttpStatus.SC_BAD_REQUEST){
+                JSONObject jsonObject = new JSONObject(responseStr);
+                return (String) jsonObject.get("error");
+            }
+
+            return "Unable to signup";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,17 +109,4 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
     protected void onPostExecute(String result) {
         handler.handle(result);
     }
-
-//    private HttpEntity createMultipartEntityBuilder(RegisterInfo registerInfo) {
-//        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-//        entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-//
-//        entityBuilder.addTextBody("email", registerInfo.getEmail());
-//        entityBuilder.addTextBody("password", registerInfo.getPassword());
-//
-//        if (registerInfo.getFile() != null) {
-//            entityBuilder.addBinaryBody("file", registerInfo.getFile());
-//        }
-//        return entityBuilder.build();
-//    }
 }
