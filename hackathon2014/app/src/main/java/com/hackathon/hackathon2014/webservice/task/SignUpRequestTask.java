@@ -98,7 +98,7 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
                 return (String) jsonObject.get("error");
             }
 
-            return "Unable to signup";
+            return "Unable to signup.";
         } catch (Exception e) {
             e.printStackTrace();
         }

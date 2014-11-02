@@ -188,7 +188,7 @@ public class SignUpActivity extends Activity {
                         startActivity(new Intent(SignUpActivity.this, QuestionActivity.class));
                     }
                 } else {
-                    displayToast("Unable to signup new account, please try again later!");
+                    displayToast(result + " Please try again!");
                 }
             }
         });
