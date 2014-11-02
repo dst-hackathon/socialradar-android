@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+import com.hackathon.hackathon2014.LoginUser;
 import com.hackathon.hackathon2014.model.RegisterInfo;
 import com.hackathon.hackathon2014.webservice.PostRequestHandler;
 
@@ -50,8 +51,8 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
     protected String doInBackground(RegisterInfo... registerInfos) {
         String boundary = "--eriksboundary--";
         MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, boundary, Charset.defaultCharset());
+        RegisterInfo registerInfo = registerInfos[0];
         try {
-            RegisterInfo registerInfo = registerInfos[0];
             entity.addPart("email", new StringBody(registerInfo.getEmail()));
             entity.addPart("password", new StringBody(registerInfo.getPassword()));
 
@@ -89,6 +90,8 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
                 JSONObject jsonObject = new JSONObject(responseStr);
                 String result = (String) jsonObject.get("success");
                 if ("".equals(result)){
+
+                    LoginUser.setLoginUser(registerInfo);
                     return "success";
                 }
                 return "fail";

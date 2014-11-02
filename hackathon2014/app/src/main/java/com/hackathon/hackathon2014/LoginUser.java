@@ -17,7 +17,7 @@ public class LoginUser {
 
     private static RegisterInfo loginUser;
 
-    public RegisterInfo getLoginUser() {
+    public static RegisterInfo getLoginUser() {
         return loginUser;
     }
 

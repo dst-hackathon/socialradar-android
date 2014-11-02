@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.hackathon.hackathon2014.LoginUser;
 import com.hackathon.hackathon2014.R;
 import com.hackathon.hackathon2014.model.RegisterInfo;
+import com.hackathon.hackathon2014.utility.AlertMessageDialogue;
 import com.hackathon.hackathon2014.utility.ImageDownloader;
 import com.hackathon.hackathon2014.webservice.PostRequestHandler;
 import com.hackathon.hackathon2014.webservice.RestProvider;
@@ -62,6 +63,7 @@ public class SignUpActivity extends Activity {
     private final String GET_AVATAR_SERVICE_URL = BASE_SERVICE_URL + "/users{id}/avatar";
 
     private ImageView _imageView;
+    private Button _signupButton;
 
     private String _imagePath;
     private String mode;
@@ -81,10 +83,12 @@ public class SignUpActivity extends Activity {
 
         if (LoginUser.isLogin()) {
             screentitle.setText("Edit Account");
+            _signupButton.setText("Update Account");
             mode = MODE_EDIT;
             loadSignUpData();
         } else {
             screentitle.setText("Setup New Account");
+            _signupButton.setText("Create New Account");
             mode = MODE_REGISTER;
             clearControls();
         }
@@ -149,7 +153,7 @@ public class SignUpActivity extends Activity {
     }
 
     private void setSignUpButtonAction() {
-        Button _signupButton = (Button) findViewById(R.id.signupbutton);
+        _signupButton = (Button) findViewById(R.id.signupbutton);
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,9 +199,25 @@ public class SignUpActivity extends Activity {
     }
 
     private void loadSignUpData() {
-        //get userid
-        //get register information from user id
-        new ImageDownloader(_imageView).execute("http://api.radar.codedeck.com/users/" + 2 + "/avatar");
+        loginWithSignUpAccount();
+        RegisterInfo registerInfo = LoginUser.getLoginUser();
+        new ImageDownloader(_imageView).execute("http://api.radar.codedeck.com/users/" + registerInfo.getId() + "/avatar");
+        setupLoadedAccount(registerInfo);
+    }
+
+    private void loginWithSignUpAccount() {
+        RegisterInfo registerInfo = LoginUser.getLoginUser();
+        RestProvider.loginUser(registerInfo.getEmail(), registerInfo.getPassword(), new PostRequestHandler<RegisterInfo>() {
+            @Override
+            public void handle(RegisterInfo registerInfo) {
+                if ((registerInfo != null) &&
+                        (registerInfo.getSuccess() != null) && ("success".equalsIgnoreCase(registerInfo.getSuccess()))) {
+                    registerInfo.setEmail(registerInfo.getEmail());
+                    registerInfo.setPassword(registerInfo.getPassword());
+                    LoginUser.setLoginUser(registerInfo);
+                }
+            }
+        });
     }
 
     /////////////////////////////////
@@ -277,6 +297,20 @@ public class SignUpActivity extends Activity {
         _password.setText("");
         _cPassword.setText("");
         _email.setText("");
+    }
+
+    private void setupLoadedAccount(RegisterInfo registerInfo){
+        EditText _name = (EditText) findViewById(R.id.name);
+        EditText _username = (EditText) findViewById(R.id.username);
+        EditText _password = (EditText) findViewById(R.id.password);
+        EditText _cPassword = (EditText) findViewById(R.id.confirmpassword);
+        EditText _email = (EditText) findViewById(R.id.email);
+
+        _name.setText("");
+        _username.setText("");
+        _password.setText(registerInfo.getPassword());
+        _cPassword.setText(registerInfo.getPassword());
+        _email.setText(registerInfo.getEmail());
     }
 
     private boolean isNotMatch(EditText password, EditText cPassword) {
