@@ -29,6 +29,7 @@ import org.apache.http.protocol.HttpContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 /**
  * Created by smileyOpal on 11/1/14.
@@ -46,7 +47,8 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
 
     @Override
     protected String doInBackground(RegisterInfo... registerInfos) {
-        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+        String boundary = "--eriksboundary--";
+        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE, boundary, Charset.defaultCharset());
         try {
             RegisterInfo registerInfo = registerInfos[0];
             entity.addPart("email", new StringBody(registerInfo.getEmail()));
@@ -54,9 +56,10 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
 
             if (null != registerInfo.getFile()) {
 //                entity.addPart("file", new FileBody(registerInfo.getFile()));
+
                 Bitmap bitmap = BitmapFactory.decodeFile(registerInfo.getFile().getAbsolutePath());
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 60, bos);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, bos);
                 byte[] data = bos.toByteArray();
                 ByteArrayBody bab = new ByteArrayBody(data, registerInfo.getFile().getName());
                 entity.addPart("file", bab);
@@ -64,6 +67,7 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
         HttpParams params = new BasicHttpParams();
 //        HttpConnectionParams.setConnectionTimeout(params, 5000);
 //        HttpConnectionParams.setSoTimeout(params, 5000);
@@ -72,7 +76,9 @@ public class SignUpRequestTask extends AsyncTask<RegisterInfo, Void, String> {
         HttpContext httpContext = new BasicHttpContext();
 
         HttpPost post = new HttpPost(url);
-//        post.addHeader("Content-Type", "multipart/form-data; ");
+        post.addHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
+        post.addHeader("Accept", "application/json");
+        post.setEntity(entity);
 //        post.setEntity(createMultipartEntityBuilder(registerInfos[0]));
 
         try {
