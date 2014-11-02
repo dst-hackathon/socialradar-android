@@ -98,9 +98,6 @@ public class SignUpActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
@@ -306,20 +303,9 @@ public class SignUpActivity extends Activity {
         registerInfo.setPassword(getEditTextValue(password));
         registerInfo.setEmail(getEditTextValue(email));
 
-        registerInfo.setFile(new File(_imagePath));
-        return registerInfo;
-    }
-
-    private MultipartEntity buildMultipartEntity(RegisterInfo registerInfo) {
-        MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-
-        try {
-            entity.addPart("email", new StringBody(registerInfo.getEmail()));
-            entity.addPart("password", new StringBody(registerInfo.getPassword()));
-            entity.addPart("file", new FileBody(registerInfo.getFile(), "images/jpg"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if (null != _imagePath) {
+            registerInfo.setFile(new File(_imagePath));
         }
-        return entity;
+        return registerInfo;
     }
 }
