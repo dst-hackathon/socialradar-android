@@ -1,14 +1,19 @@
 package com.hackathon.hackathon2014.model;
 
+import java.io.Serializable;
+
 /**
  * Created by smileyOpal on 10/31/14.
  */
-public class RegisterInfo {
+public class RegisterInfo implements Serializable {
     private String displayName;
     private int id;
     private String username;
     private String password;
     private String email;
+    private String success;
+    private String error;
+    private String token;
     private byte[] file;
 
     public String getDisplayName() {
@@ -57,5 +62,29 @@ public class RegisterInfo {
 
     public void setFile(byte[] file) {
         this.file = file;
+    }
+
+    public String getSuccess() {
+        return success;
+    }
+
+    public void setSuccess(String success) {
+        this.success = success;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

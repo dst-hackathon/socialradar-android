@@ -3,8 +3,10 @@ package com.hackathon.hackathon2014.webservice;
 import com.hackathon.hackathon2014.model.Category;
 import com.hackathon.hackathon2014.model.FriendModel;
 import com.hackathon.hackathon2014.model.Question;
+import com.hackathon.hackathon2014.model.RegisterInfo;
 import com.hackathon.hackathon2014.webservice.task.CategoryRequestTask;
 import com.hackathon.hackathon2014.webservice.task.FriendListRequestTask;
+import com.hackathon.hackathon2014.webservice.task.LoginRequestTask;
 import com.hackathon.hackathon2014.webservice.task.QuestionRequestTask;
 import com.hackathon.hackathon2014.webservice.task.SubmitAnswerRequestTask;
 
@@ -43,9 +45,13 @@ public class RestProvider {
         new SubmitAnswerRequestTask(getInstance(),handler).execute(question);
     }
 
-    public static void getFriendList(String id,PostRequestHandler<List<FriendModel>> handler)
+    public static void getFriendList(String id,PostRequestHandler<List<FriendModel>> handler) {
+        new FriendListRequestTask(getInstance(), handler).execute(id);
+    }
+
+    public static void loginUser(String email, String password,PostRequestHandler<RegisterInfo> handler)
     {
-        new FriendListRequestTask(getInstance(),handler).execute(id);
+        new LoginRequestTask(getInstance(), handler).execute(email, password);
     }
 
 }
